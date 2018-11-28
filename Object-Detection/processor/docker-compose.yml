@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  detector:
+    build: .
+    devices:
+      - "/dev/video0"
+    volumes:
+      - "/tmp/.X11-unix:/tmp/.X11-unix"
+      - "/tmp/.docker.xauth:/tmp/.docker.xauth"
+      - ".:/src"
+    environment:
+      - XAUTHORITY=/tmp/.docker.xauth
+      - DISPLAY=unix:0

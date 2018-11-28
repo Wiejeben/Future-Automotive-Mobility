@@ -6,21 +6,15 @@ Apply tensorflow object detection on input video stream. One could use webcam (o
 
 Clone repo in your working directory
 
-Build docker image:
+Build and launch:
 
-> docker build -t realtime-objectdetection .
-
-Configure script (see bellow)
-
-Launch script:
-
-> bash runDocker.sh
+> bash start.sh
 
 # To configure it:
 
-Configuration is made in exec.sh at python function call:
+Configuration is made in start-internal.sh at Python function call:
 
-> python3 my-object-detection.py ...
+> python3 my-object-detection.py -d 1 ...
 
 All possible arguments are:
 
@@ -46,7 +40,3 @@ Suggested numbers of workers and queues size:
 
 - Webcam stream: default values
 - Video stream: 20 workers, 150 queue size (Maybe little hand tunning could be done)
-
-Inputs file are in inputs/ folder
-
-Outputs file are in outputs/ folder (.avi)
