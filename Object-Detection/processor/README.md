@@ -35,8 +35,6 @@ All possible arguments are:
 
 -I (--input-device), type=int, default=0: Device number input
 
--i (--input-videos), type=str, default="": Path to videos input, overwrite device input if used
-
 -w (--num-workers), type=int, default=2: Number of workers
 
 -q-size (--queue-size), type=int, default=5: Size of the queue

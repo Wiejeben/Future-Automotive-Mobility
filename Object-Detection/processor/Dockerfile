@@ -49,9 +49,8 @@ RUN cd /usr/local/src/opencv-3.4.1/ && mkdir build
 RUN cd /usr/local/src/opencv-3.4.1/build && cmake -D CMAKE_INSTALL_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local/ .. && make -j4 && make install
 
 #Setting up working directory 
-RUN mkdir /lab
-WORKDIR /lab
-#ADD . /lab/
+RUN mkdir /src
+WORKDIR /src
 
 #Minimize image size 
 RUN (apt-get autoremove -y; \
@@ -61,4 +60,4 @@ RUN (apt-get autoremove -y; \
 ENV PYTHONPATH "$PYTHONPATH:/usr/local/lib/python3.5/dist-packages/tensorflow/models/research:/usr/local/lib/python3.5/dist-packages/tensorflow/models/research/slim"
 RUN cd /usr/local/lib/python3.5/dist-packages/tensorflow/models/research && protoc object_detection/protos/*.proto --python_out=.
 
-CMD bash exec.sh
+CMD bash start-internal.sh
