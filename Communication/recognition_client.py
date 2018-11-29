@@ -11,9 +11,10 @@ class RecognitionClient():
         print('Connection established.')
     
     def talkToServer(self):
-        command = input('Geef een actie: ')
-        print(command)
-        self.socket.send(command.encode())
+        while True:
+            command = input('Geef een actie: ')
+            print(command)
+            self.socket.send(command.encode())
 
 a = RecognitionClient('192.168.43.238', 3000)
 a.init()
