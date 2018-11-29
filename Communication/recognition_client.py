@@ -10,12 +10,12 @@ class RecognitionClient():
         self.socket.connect((self.host,self.port))
         print('Connection established.')
     
-    def talkToServer(self, action):
-        command = action
+    def talkToServer(self):
+        command = input('Geef een actie: ')
         print(command)
         self.socket.send(command.encode())
 
 a = RecognitionClient('192.168.43.238', 3000)
 a.init()
-a.talkToServer('people crossing the street')
+a.talkToServer()
 # a.talkToServer('person might cross the street')  
