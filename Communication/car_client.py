@@ -1,4 +1,5 @@
 import socket
+import sys
 
 class CarClient():
     def __init__(self, host, port):
@@ -7,12 +8,19 @@ class CarClient():
 
     def init(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect((self.host,self.port))
-        print('Connection established.')
+
+        try:
+            self.socket.connect((self.host,self.port))
+        except:
+            print('Connection NOT established.')
+            sys.exit()
+
+        print('Connection Established')
+        print("enter 'quit' to exit")
     
     def listenToServer(self):
         while True:
-            reply = self.socket.recv(1024).decode()
+            reply = self.socket.recv(5120).decode()
             if reply == 'Terminate':
                 break
             elif reply == 'test1':
@@ -24,7 +32,7 @@ class CarClient():
             elif reply == 'test4':
                 print('Dit was test 4')
             
-            # print(reply)
+            print(reply)
 
 a = CarClient('192.168.43.238', 3000)
 a.init()
