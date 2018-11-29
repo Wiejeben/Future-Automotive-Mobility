@@ -20,7 +20,8 @@ class CarClient():
     
     def listenToServer(self):
         while True:
-            reply = self.socket.recv(5120).decode()
+            reply = self.socket.recv(1024).decode()
+            print(reply)
             if reply == 'Terminate':
                 break
             elif reply == 'test1':
