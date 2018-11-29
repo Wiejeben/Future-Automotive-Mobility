@@ -12,9 +12,6 @@ class CarClient():
     
     def listenToServer(self):
         while True:
-            command = input('Enter your command:')
-            print(command)
-            self.socket.send(command.encode())
             reply = self.socket.recv(1024).decode()
             if reply == 'Terminate':
                 break
