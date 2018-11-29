@@ -1,45 +1,39 @@
 FROM ubuntu:16.04
 
-RUN  apt-get update
-RUN  apt-get upgrade -y
+RUN apt-get update
+RUN apt-get upgrade -y
 
-# Install python packages 
-RUN  apt-get install -y python3
+# Install Python packages
+RUN apt-get install -y python3
 
 # Install compile tools
-RUN  apt-get update
-RUN  apt-get install -y python3-dev build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+RUN apt-get update
+RUN apt-get install -y python3-dev build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
 RUN apt-get install -qqy x11-apps
 
-# Install dependencies tools 
-RUN apt-get install -y wget vim
+# Install Tensorflow models object detection
+RUN git clone https://github.com/tensorflow/models /usr/local/lib/python3.5/dist-packages/tensorflow/models
+RUN apt-get install -y wget
+
+RUN apt-get install -y python-pil python-lxml python-tk
+RUN wget -P /usr/local/src/ https://github.com/google/protobuf/releases/download/v3.6.1/protobuf-python-3.6.1.tar.gz
+RUN cd /usr/local/src/ && tar xvf protobuf-python-3.6.1.tar.gz && rm protobuf-python-3.6.1.tar.gz
+RUN cd /usr/local/src/protobuf-3.6.1/ && ./configure && make && make install && ldconfig
+
+# Install dependencies tools
 RUN wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
 RUN python3 /tmp/get-pip.py
 RUN pip install --upgrade pip
 
 # Install core packages 
-RUN  pip install -U numpy
-RUN  pip install -U matplotlib
-RUN  pip install -U notebook 
-RUN  pip install --upgrade jupyter
-RUN  pip install -U pandas
+RUN pip install -U numpy
+RUN pip install -U matplotlib
 
-RUN  apt-get install -y ffmpeg
-RUN  pip install -U moviepy
+RUN apt-get install -y ffmpeg
+RUN pip install -U moviepy
 
-# Install tensorFlow and keras
+# Install TensorFlow
 RUN pip install -U tensorflow
-RUN pip install -U keras
-
-# Install tensorflow models object detection
-RUN git clone https://github.com/tensorflow/models /usr/local/lib/python3.5/dist-packages/tensorflow/models
-RUN apt-get install -y python-pil python-lxml python-tk
-RUN wget -P /usr/local/src/ https://github.com/google/protobuf/releases/download/v3.5.1/protobuf-python-3.5.1.tar.gz
-RUN cd /usr/local/src/ && tar xvf protobuf-python-3.5.1.tar.gz && rm protobuf-python-3.5.1.tar.gz 
-RUN cd /usr/local/src/protobuf-3.5.1/ && ./configure && make && make install && ldconfig
-
-#add dataframe display widget
-RUN pip install -U autovizwidget && jupyter nbextension enable --py --sys-prefix widgetsnbextension
 
 # Install OpenCV
 RUN apt-get install -y unzip
