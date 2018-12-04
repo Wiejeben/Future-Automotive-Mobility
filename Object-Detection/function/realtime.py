@@ -13,47 +13,46 @@ class Realtime:
 
     def __init__(self, args):
         self.args = args
-        self.display = not ((not args["display"]) & (args["num_frames"] < 0))
+        self.display = args["display"] == 1
         self.queue_input = None
         self.queue_output = None
         self.pool = None
         self.vs = None
         self.fps = None
-        self.output = None
 
-        self.start_queue(args["logger_debug"], args["queue_size"], args["num_workers"])
+        self.start_queue(
+            args["logger_debug"],
+            args["queue_size"],
+            args["num_workers"]
+        )
         self.start_video(args["input_device"])
-        self.start_output(args["output"])
 
     def start_queue(self, debugger, size, workers):
         """
-        Set the multiprocessing logger to debug if required.
+        Starts processing queue.
         """
 
         if debugger:
             logger = multiprocessing.log_to_stderr()
             logger.setLevel(multiprocessing.SUBDEBUG)
 
-        # Multiprocessing: Init input and output Queue and pool of workers
         self.queue_input = Queue(maxsize=size)
         self.queue_output = Queue(maxsize=size)
         self.pool = Pool(workers, worker, (self.queue_input, self.queue_output))
 
     def start_video(self, device):
-        # created a threaded video stream and start the FPS counter
+        """
+        Create a threaded video stream and start the FPS counter.
+        """
+
         self.vs = WebcamVideoStream(src=device).start()
         self.fps = FPS().start()
 
-    def start_output(self, enabled):
-        if enabled:
-            self.output = cv2.VideoWriter(
-                'outputs/{}.avi'.format(args["output_name"]),
-                cv2.VideoWriter_fourcc(*'XVID'),
-                self.vs.getFPS() / args["num_workers"],
-                (self.vs.getWidth(), self.vs.getHeight())
-            )
-
     def start(self):
+        """
+        Start processing video feed.
+        """
+
         if self.display:
             print()
             print("=====================================================================")
@@ -62,41 +61,36 @@ class Realtime:
             print()
 
         # Start reading and treating the video stream
-        countFrame = 0
-        while True:
-            # Capture frame-by-frame
-            ret, frame = self.vs.read()
-            countFrame = countFrame + 1
-            if ret:
-                self.queue_input.put(frame)
-                output_rgb = cv2.cvtColor(self.queue_output.get(), cv2.COLOR_RGB2BGR)
+        running = True
+        while running:
+            running = self.capture()
 
-                # write the frame
-                if self.output:
-                    self.output.write(output_rgb)
+        self.destroy()
 
-                # Display the resulting frame
-                if self.display:
-                    cv2.imshow('frame', output_rgb)
-                    self.fps.update()
-                elif countFrame >= args["num_frames"]:
-                    break
+    def capture(self):
+        # Capture frame-by-frame
+        ret, frame = self.vs.read()
 
-            else:
-                break
+        if not ret:
+            return True
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            return False
 
+        self.queue_input.put(frame)
+        output_rgb = cv2.cvtColor(self.queue_output.get(), cv2.COLOR_RGB2BGR)
+
+        # Display the resulting frame
+        if self.display:
+            cv2.imshow('frame', output_rgb)
+            self.fps.update()
+
+        return True
+
+    def destroy(self):
         # When everything done, release the capture
         self.fps.stop()
         self.pool.terminate()
         self.vs.stop()
-        if self.output:
-            self.output.release()
 
         cv2.destroyAllWindows()
-
-def realtime(args):
-    app = Realtime(args)
-    app.start()

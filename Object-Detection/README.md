@@ -1,31 +1,25 @@
-# Object-detection
+# Object Detection
 
-Apply tensorflow object detection on input video stream. One could use webcam (or any other device) stream or send a video file. It is possible to write Output put file with detection boxes.
+Applies Tensorflow object detection to webcam video stream.
 
-# To use it:
+# Installation:
 
-Clone repo in your working directory
+Make sure you are running Linux. This is required since Docker does not support device passthrough on other operating systems.
+Also make sure you have Docker up and running.
 
-Build and launch:
+To build the Docker image, execute:
+> ./build.sh
 
-> bash start.sh
+To run the Docker image, execute:
+> ./start.sh
 
-# To configure it:
-
-Configuration is made in start-internal.sh at Python function call:
-
-> python3 my-object-detection.py -d 1 ...
+You may also execute the `docker-compose` commands directly, however in order to show a display `xhost +` has to be executed first.
+ 
 
 All possible arguments are:
 
 ```
--n (--num-frames): type=int, default=0: # of frames to loop over for FPS test
-
 -d (--display), type=int, default=0: Whether or not frames should be displayed
-
--o (--output), type=int, default=0: Whether or not modified videos shall be writen
-
--on (--output-name), type=str, default="output": Name of the output video file
 
 -I (--input-device), type=int, default=0: Device number input
 
@@ -36,7 +30,3 @@ All possible arguments are:
 -l (--logger-debug), type=int, default=0: Print logger debug
 
 ```
-Suggested numbers of workers and queues size:
-
-- Webcam stream: default values
-- Video stream: 20 workers, 150 queue size (Maybe little hand tunning could be done)
