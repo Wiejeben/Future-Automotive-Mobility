@@ -1,8 +1,10 @@
-from utils.app_utils import FPS, WebcamVideoStream
-from utils.objDet_utils import *
 import multiprocessing
 from multiprocessing import Queue, Pool
 import cv2
+
+from src.FPS import FPS
+from src.WebcamVideoStream import WebcamVideoStream
+from src.ObjectDetection import *
 
 
 class Realtime:

@@ -1,9 +1,11 @@
 import os
-from utils.app_utils import *
 import numpy as np
 import tensorflow as tf
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
+import cv2
+
+from src.FPS import FPS
 
 
 # Path to frozen detection graph. This is the actual model that is used for the object detection.

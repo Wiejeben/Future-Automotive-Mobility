@@ -1,4 +1,4 @@
-from function.realtime import Realtime
+from src.Realtime import Realtime
 from argparse import ArgumentParser
 import os
 
