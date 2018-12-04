@@ -4,7 +4,7 @@ import cv2
 
 from src.FPS import FPS
 from src.WebcamVideoStream import WebcamVideoStream
-from src.ObjectDetection import *
+from src.ObjectDetection import ObjectDetection
 
 
 class Realtime:
@@ -38,7 +38,7 @@ class Realtime:
 
         self.queue_input = Queue(maxsize=size)
         self.queue_output = Queue(maxsize=size)
-        self.pool = Pool(workers, worker, (self.queue_input, self.queue_output))
+        self.pool = Pool(workers, ObjectDetection().worker, (self.queue_input, self.queue_output))
 
     def start_stream(self, device):
         """
