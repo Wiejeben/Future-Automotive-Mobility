@@ -12,3 +12,4 @@ services:
     environment:
       - XAUTHORITY=/tmp/.docker.xauth
       - DISPLAY=unix:0
+      - PYTHONUNBUFFERED=0
