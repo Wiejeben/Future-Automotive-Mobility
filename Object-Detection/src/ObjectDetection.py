@@ -8,7 +8,7 @@ import cv2
 from src.FPS import FPS
 
 # Define object detection models and labels
-PATH_TO_CKPT = 'model/frozen_inference_graph.pb'
+PATH_TO_CKPT = 'model/frozen_inference_graph.pb' # SSD model
 PATH_TO_LABELS = 'model/mscoco_label_map.pbtxt'
 NUM_CLASSES = 90
 
