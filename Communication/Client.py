@@ -12,17 +12,6 @@ class Client:
     def connect(self):
         self.socket.connect((self.host, self.port))
         print('Successfully connected to', self.host + ':' + str(self.port))
-        Thread(target=self.threaded_listen, daemon=True).start()
-
-    def threaded_listen(self):
-        while True:
-            data = self.socket.recv(1024).decode()
-
-            # Empty data means disconnect
-            if not data:
-                break
-
-            print(data)
 
     def respond(self, message):
         self.socket.send(message.encode())
