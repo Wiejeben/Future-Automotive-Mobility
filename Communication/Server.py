@@ -45,7 +45,6 @@ class Server:
 
         while True:
             data = conn.recv(1024)
-
             # On disconnect
             if not data:
                 break
