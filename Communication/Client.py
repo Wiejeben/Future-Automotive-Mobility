@@ -22,6 +22,8 @@ class Client:
             if not data:
                 break
 
+            print(data)
+
     def respond(self, message):
         self.socket.send(message.encode())
 
