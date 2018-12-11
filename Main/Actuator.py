@@ -3,7 +3,7 @@ import RPi.GPIO as GPIO
 
 
 class Actuator:
-    def __init__(self, pin_forward, pin_backward, pin_pwm):
+    def __init__(self, pin_forward: int, pin_backward: int, pin_pwm: int):
         self.pin_forward = pin_forward
         self.pin_backward = pin_backward
         self.pin_pwm = pin_pwm
@@ -20,7 +20,7 @@ class Actuator:
         # 1 = forward
         self.direction = 0
 
-    def forward(self, power=100):
+    def forward(self, power: int = 100):
         print('Forward')
 
         if self.direction != 1:
@@ -30,7 +30,7 @@ class Actuator:
 
         self.power.ChangeDutyCycle(power)
 
-    def reverse(self, power=100):
+    def reverse(self, power: int = 100):
         print('Reverse')
 
         if self.direction != -1:

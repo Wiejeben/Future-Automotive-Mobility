@@ -15,7 +15,7 @@ class Vehicle:
         self.client.connect()
         self.client.listen(self.on_message)
 
-    def on_message(self, message):
+    def on_message(self, message: str):
         print('Incoming message:', message)
 
         if message == 'forward':

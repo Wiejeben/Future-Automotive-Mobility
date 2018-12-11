@@ -1,8 +1,8 @@
 class Controller:
-    def forward(self, power=100):
+    def forward(self, power: int = 100):
         pass
 
-    def reverse(self, power=100):
+    def reverse(self, power: int = 100):
         pass
 
     def neutral(self):

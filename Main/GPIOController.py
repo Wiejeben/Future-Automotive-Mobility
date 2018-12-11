@@ -22,11 +22,11 @@ class GPIOController(Controller):
             pin_pwm=int(os.getenv('PIN_RIGHT_PWM'))
         )
 
-    def forward(self, power=100):
+    def forward(self, power: int = 100):
         self.left.forward(power)
         self.right.forward(power)
 
-    def reverse(self, power=100):
+    def reverse(self, power: int = 100):
         self.left.reverse(power)
         self.right.reverse(power)
 
