@@ -1,8 +1,10 @@
-# Future-Automotive-Mobility
-Repository for Smarterdam project - University of Applied Sciences Rotterdam
+# Smarterdam
+Repository for Smarterdam - Minor Future Automotive Mobility - University of Applied Sciences Rotterdam.
 
 # Installation
-`pip install -r requirements.txt`
+To install dependencies, run `pip install -r requirements.txt`.   
+Make sure your environmental variables are up-to-date by comparing it to the `.env.example`.
+
 
 # Pre-commit
-`pip freeze > requirements.txt`
+To commit newly added dependencies, run `pip freeze > requirements.txt`.
