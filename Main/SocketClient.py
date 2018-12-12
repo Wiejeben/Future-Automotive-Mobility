@@ -1,6 +1,8 @@
 import settings
 import os
 import socket
+import time
+from threading import Thread
 
 
 class SocketClient:
@@ -8,10 +10,38 @@ class SocketClient:
         self.host = str(os.getenv('SOCKET_HOST', '0.0.0.0'))
         self.port = int(os.getenv('SOCKET_PORT'))
         self.socket = socket.socket()
+        self.connected = False
 
     def connect(self):
-        self.socket.connect((self.host, self.port))
+        print('Trying to connect...')
+
+        try:
+            self.socket.connect((self.host, self.port))
+        except socket.error:
+            print('Failed to connect')
+            return False
+
+        self.connected = True
         print('Successfully connected to', self.host + ':' + str(self.port))
+
+        Thread(target=self.isAlive, daemon=True).start()
+
+        return True
+
+    def isAlive(self):
+        while True:
+            try: 
+                self.socket.send( bytes( "-", "UTF-8" ) )
+                time.sleep(1) 
+            except socket.error:
+                print('Connection error!')
+                self.connected = False
+                retryConnection: bool = self.connect()
+                if(not retryConnection):
+                    time.sleep(5)
+                    self.connect()
+                break
+
 
     def disconnect(self):
         pass

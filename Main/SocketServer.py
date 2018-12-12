@@ -61,6 +61,7 @@ class SocketServer:
         """
         When receiving a message from connected client.
         """
+        print(message)
 
         if message == '1':
             self.broadcast('neutral')
@@ -68,6 +69,8 @@ class SocketServer:
             self.broadcast('forward')
         elif message == 'bye':
             return False
+        elif message == '-':
+            return True
         else:
             conn.sendall(str.encode('Unknown command: ' + message))
 
