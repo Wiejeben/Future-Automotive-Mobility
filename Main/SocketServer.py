@@ -62,7 +62,7 @@ class SocketServer:
         """
         When receiving a message from connected client.
         """
-        print(message)
+        print('Received:', message)
 
         if message == '1':
             self.broadcast('neutral')
