@@ -1,3 +1,4 @@
+# noinspection PyUnresolvedReferences
 import settings
 import os
 import socket

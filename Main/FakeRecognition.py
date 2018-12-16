@@ -1,5 +1,4 @@
 from SocketClient import SocketClient
-import os
 
 
 class FakeRecognition:
