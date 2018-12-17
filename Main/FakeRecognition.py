@@ -24,4 +24,7 @@ if __name__ == '__main__':
     recognition.connect()
 
     while True:
-        recognition.input()
+        try:
+            recognition.input()
+        except KeyboardInterrupt:
+            break

@@ -50,6 +50,23 @@ class SocketClient:
                     ready_to_read, ready_to_write, in_error = select.select(
                         [self.connection, ], [self.connection, ], [], 5
                     )
+
+                    if len(ready_to_read) > 0:
+                        recv = self.connection.recv(1024).decode()
+
+                        if not recv:
+                            print('Server left the room')
+                            self.disconnect()
+
+                            if not reconnect:
+                                break
+
+                            if not self.connect():
+                                break
+
+                            continue
+
+                        callback(recv)
                 except select.error as exception:
                     print('Connection error:', exception)
 
@@ -58,23 +75,6 @@ class SocketClient:
 
                     if not self.connect():
                         break
-
-                if len(ready_to_read) > 0:
-                    recv = self.connection.recv(1024).decode()
-
-                    if not recv:
-                        print('Server left the room')
-                        self.disconnect()
-
-                        if not reconnect:
-                            break
-
-                        if not self.connect():
-                            break
-
-                        continue
-
-                    callback(recv)
 
                 time.sleep(0.1)
         except KeyboardInterrupt:

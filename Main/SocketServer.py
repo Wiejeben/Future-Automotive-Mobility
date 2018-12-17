@@ -46,7 +46,11 @@ class SocketServer:
         self.clients[port] = conn
 
         while True:
-            data = conn.recv(1024)
+            try:
+                data = conn.recv(1024)
+            except ConnectionResetError:
+                break
+
             # On disconnect
             if not data:
                 break
@@ -55,7 +59,7 @@ class SocketServer:
             if not self.on_message(conn, data.decode('utf-8')):
                 break
 
-        print('Client disconnected')
+        print('Client (' + str(port) + ') disconnected')
         del self.clients[port]
         conn.close()
 
