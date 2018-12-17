@@ -1,5 +1,4 @@
 from SocketClient import SocketClient
-import os
 
 
 class FakeRecognition:
@@ -25,4 +24,7 @@ if __name__ == '__main__':
     recognition.connect()
 
     while True:
-        recognition.input()
+        try:
+            recognition.input()
+        except KeyboardInterrupt:
+            break

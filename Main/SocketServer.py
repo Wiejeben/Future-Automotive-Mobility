@@ -1,3 +1,4 @@
+# noinspection PyUnresolvedReferences
 import settings
 import os
 import socket
@@ -11,6 +12,7 @@ class SocketServer:
 
         # Create IPv4 TCP server
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind(('0.0.0.0', self.port))
 
     def listen(self):
@@ -44,7 +46,11 @@ class SocketServer:
         self.clients[port] = conn
 
         while True:
-            data = conn.recv(1024)
+            try:
+                data = conn.recv(1024)
+            except ConnectionResetError:
+                break
+
             # On disconnect
             if not data:
                 break
@@ -53,7 +59,7 @@ class SocketServer:
             if not self.on_message(conn, data.decode('utf-8')):
                 break
 
-        print('Client disconnected')
+        print('Client (' + str(port) + ') disconnected')
         del self.clients[port]
         conn.close()
 
@@ -61,7 +67,7 @@ class SocketServer:
         """
         When receiving a message from connected client.
         """
-        print(message)
+        print('Received:', message)
 
         if message == '1':
             self.broadcast('neutral')
