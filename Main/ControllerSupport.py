@@ -14,6 +14,7 @@ import os
 import pprint
 import pygame
 from SocketClient import SocketClient
+import numpy as np
 import time
 
 class PS4Controller(object):
@@ -34,13 +35,14 @@ class PS4Controller(object):
 
         """Initialze Communication Client"""
         self.client = SocketClient()
-        self.connect()
+        # self.connect()
 
     def connect(self):
         """Connect with server"""
         self.client.connect()
 
     def sendInput(self, message: str):
+        """Send controller output to server"""
         self.client.send(message)
 
     def listen(self):
@@ -74,9 +76,9 @@ class PS4Controller(object):
                 # In the current setup, I have the state simply printing out to the screen.
                 
                 # os.system('clear')
-                # pprint.pprint(self.button_data)
-                # pprint.pprint(self.axis_data)
-                # pprint.pprint(self.hat_data)
+                # print(self.button_data)
+                # print(self.axis_data)
+                # print(self.hat_data)
 
                 # 0 = []
                 # 1 = x
@@ -94,15 +96,16 @@ class PS4Controller(object):
                 # 13 = touchpad
 
 
-
-                if(self.button_data[7]):
-                    # time.sleep(0.1)
-                    print('vroom')
-                    self.sendInput('forward')
-                elif(self.button_data[6]):
-                    # time.sleep(0.1)
-                    print('brake!!!')
+                if(self.button_data[6]):
+                    time.sleep(0.1)
+                    print('L2 is Pressed. Telling the car to go backwards')
                     self.sendInput('backward')
+                if(self.button_data[7]):
+                    time.sleep(0.1)
+                    mappedR2Value = np.interp(self.axis_data[5], (-1,1), (0,100))
+                    print('R2 is Pressed. Telling the car to go forwards with specific speed')
+                    print('R2 is pressed for ', mappedR2Value)
+                
 
 
 if __name__ == "__main__":
