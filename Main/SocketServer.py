@@ -77,6 +77,8 @@ class SocketServer:
             self.broadcast('100% POWER')
         elif message == 'backward':
             self.broadcast('backward')
+        elif message == 'Neutral':
+            self.broadcast('neutral')
         elif message == 'bye':
             return False
         elif message == '-':
