@@ -18,6 +18,8 @@ class Joystick(object):
         self.client = SocketClient()
         self.client.connect()
 
+        self.clock = pygame.time.Clock()
+
     def send_input(self, message: str):
         """
         Send joystick output to server
@@ -43,6 +45,8 @@ class Joystick(object):
                 self.hat_data[i] = (0, 0)
 
         while True:
+            self.clock.tick(10)
+
             for event in pygame.event.get():
                 if event.type == pygame.JOYAXISMOTION:
                     self.axis_data[event.axis] = round(event.value, 2)
@@ -77,11 +81,10 @@ class Joystick(object):
                 # 13 = touchpad
 
                 if self.button_data[6]:
-                    time.sleep(0.1)
                     print('L2 is Pressed. Telling the car to go backwards')
                     self.send_input('backward')
+
                 if self.button_data[7]:
-                    time.sleep(0.1)
                     mapped_r2_value = np.interp(self.axis_data[5], (-1, 1), (0, 100))
 
                     print('R2 is Pressed. Telling the car to go forwards with specific speed')
@@ -96,6 +99,7 @@ class Joystick(object):
                     elif mapped_r2_value <= 100:
                         print('100% POWERR!')
                         self.send_input('100% POWER!')
+
                 elif not self.button_data[6] and not self.button_data[7]:
                     self.send_input('Neutral')
 
