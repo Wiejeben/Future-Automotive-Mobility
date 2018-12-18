@@ -1,4 +1,4 @@
-from SocketClient import SocketClient
+from lib.SocketClient import SocketClient
 
 
 class FakeRecognition:

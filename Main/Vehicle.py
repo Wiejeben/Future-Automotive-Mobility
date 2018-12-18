@@ -1,9 +1,10 @@
-from SocketClient import SocketClient
+from lib.SocketClient import SocketClient
 
 try:
-    from GPIOController import GPIOController as Controller
+    from lib.GPIOController import GPIOController as Controller
 except ModuleNotFoundError:
-    from FakeController import FakeController as Controller
+    print('RPi.GPIO not found, falling back to faker.')
+    from lib.FakeController import FakeController as Controller
 
 
 class Vehicle:

@@ -1,5 +1,5 @@
 # noinspection PyUnresolvedReferences
-import settings
+from lib import settings
 import os
 import socket
 from threading import Thread

@@ -1,4 +1,3 @@
-
 # This file presents an interface for interacting with the Playstation 4 Controller
 # in Python. Simply plug your PS4 controller into your computer using USB and run this
 # script!
@@ -10,12 +9,11 @@
 #
 # Distributed under terms of the MIT license.
 
-import os
-import pprint
 import pygame
-from SocketClient import SocketClient
+from lib.SocketClient import SocketClient
 import numpy as np
 import time
+
 
 class PS4Controller(object):
     """Class representing the PS4 controller."""
@@ -27,7 +25,7 @@ class PS4Controller(object):
 
     def __init__(self):
         """Initialize the joystick components"""
-        
+
         pygame.init()
         pygame.joystick.init()
         self.controller = pygame.joystick.Joystick(0)
@@ -46,8 +44,8 @@ class PS4Controller(object):
         self.client.send(message)
 
     def listen(self):
-        """Listen for events to happen"""
-        
+        """Listen for events from the controller"""
+
         if not self.axis_data:
             self.axis_data = {}
 
@@ -64,7 +62,7 @@ class PS4Controller(object):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.JOYAXISMOTION:
-                    self.axis_data[event.axis] = round(event.value,2)
+                    self.axis_data[event.axis] = round(event.value, 2)
                 elif event.type == pygame.JOYBUTTONDOWN:
                     self.button_data[event.button] = True
                 elif event.type == pygame.JOYBUTTONUP:
@@ -74,7 +72,7 @@ class PS4Controller(object):
 
                 # Insert your code on what you would like to happen for each event here!
                 # In the current setup, I have the state simply printing out to the screen.
-                
+
                 # os.system('clear')
                 # print(self.button_data)
                 # print(self.axis_data)
@@ -95,31 +93,26 @@ class PS4Controller(object):
                 # 12 = PSbutton
                 # 13 = touchpad
 
-
-                if(self.button_data[6]):
+                if (self.button_data[6]):
                     time.sleep(0.1)
                     print('L2 is Pressed. Telling the car to go backwards')
                     self.sendInput('backward')
-                if(self.button_data[7]):
+                if (self.button_data[7]):
                     time.sleep(0.1)
-                    mappedR2Value = np.interp(self.axis_data[5], (-1,1), (0,100))
+                    mappedR2Value = np.interp(self.axis_data[5], (-1, 1), (0, 100))
                     print('R2 is Pressed. Telling the car to go forwards with specific speed')
                     print(mappedR2Value)
-                    if(mappedR2Value < 33):
+                    if (mappedR2Value < 33):
                         print('30% POWERR!')
                         self.sendInput('30% POWER!')
-                    elif(mappedR2Value < 66):
+                    elif (mappedR2Value < 66):
                         print('60% POWERR!')
                         self.sendInput('60% POWER!')
-                    elif(mappedR2Value <= 100):
+                    elif (mappedR2Value <= 100):
                         print('100% POWERR!')
                         self.sendInput('100% POWER!')
-                elif(not self.button_data[6] and not self.button_data[7]):
+                elif (not self.button_data[6] and not self.button_data[7]):
                     self.sendInput('Neutral')
-                
-                
-
-                
 
 
 if __name__ == "__main__":
