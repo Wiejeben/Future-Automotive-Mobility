@@ -114,8 +114,9 @@ class PS4Controller(object):
                     elif(mappedR2Value <= 100):
                         print('100% POWERR!')
                         self.sendInput('100% POWER!')
-                else:
+                elif(not self.button_data[6] and not self.button_data[7]):
                     self.sendInput('Neutral')
+                
                 
 
                 
