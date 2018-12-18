@@ -1,62 +1,45 @@
-# This file presents an interface for interacting with the Playstation 4 Controller
-# in Python. Simply plug your PS4 controller into your computer using USB and run this
-# script!
-#
-# NOTE: I assume in this script that the only joystick plugged in is the PS4 controller.
-#       if this is not the case, you will need to change the class accordingly.
-#
-# Copyright © 2015 Clay L. McLeod <clay.l.mcleod@gmail.com>
-#
-# Distributed under terms of the MIT license.
-
 import pygame
 from lib.SocketClient import SocketClient
 import numpy as np
 import time
 
 
-class PS4Controller(object):
-    """Class representing the PS4 controller."""
-
-    controller = None
-    axis_data = None
-    button_data = None
-    hat_data = None
-
+class Joystick(object):
     def __init__(self):
-        """Initialize the joystick components"""
-
         pygame.init()
         pygame.joystick.init()
-        self.controller = pygame.joystick.Joystick(0)
-        self.controller.init()
+        self.joystick = pygame.joystick.Joystick(0)
+        self.joystick.init()
 
-        """Initialze Communication Client"""
+        self.axis_data = None
+        self.button_data = None
+        self.hat_data = None
+
         self.client = SocketClient()
-        self.connect()
-
-    def connect(self):
-        """Connect with server"""
         self.client.connect()
 
-    def sendInput(self, message: str):
-        """Send controller output to server"""
+    def send_input(self, message: str):
+        """
+        Send joystick output to server
+        """
         self.client.send(message)
 
     def listen(self):
-        """Listen for events from the controller"""
+        """
+        Listen for events from the joystick
+        """
 
         if not self.axis_data:
             self.axis_data = {}
 
         if not self.button_data:
             self.button_data = {}
-            for i in range(self.controller.get_numbuttons()):
+            for i in range(self.joystick.get_numbuttons()):
                 self.button_data[i] = False
 
         if not self.hat_data:
             self.hat_data = {}
-            for i in range(self.controller.get_numhats()):
+            for i in range(self.joystick.get_numhats()):
                 self.hat_data[i] = (0, 0)
 
         while True:
@@ -93,28 +76,30 @@ class PS4Controller(object):
                 # 12 = PSbutton
                 # 13 = touchpad
 
-                if (self.button_data[6]):
+                if self.button_data[6]:
                     time.sleep(0.1)
                     print('L2 is Pressed. Telling the car to go backwards')
-                    self.sendInput('backward')
-                if (self.button_data[7]):
+                    self.send_input('backward')
+                if self.button_data[7]:
                     time.sleep(0.1)
-                    mappedR2Value = np.interp(self.axis_data[5], (-1, 1), (0, 100))
+                    mapped_r2_value = np.interp(self.axis_data[5], (-1, 1), (0, 100))
+
                     print('R2 is Pressed. Telling the car to go forwards with specific speed')
-                    print(mappedR2Value)
-                    if (mappedR2Value < 33):
+                    print(mapped_r2_value)
+
+                    if mapped_r2_value < 33:
                         print('30% POWERR!')
-                        self.sendInput('30% POWER!')
-                    elif (mappedR2Value < 66):
+                        self.send_input('30% POWER!')
+                    elif mapped_r2_value < 66:
                         print('60% POWERR!')
-                        self.sendInput('60% POWER!')
-                    elif (mappedR2Value <= 100):
+                        self.send_input('60% POWER!')
+                    elif mapped_r2_value <= 100:
                         print('100% POWERR!')
-                        self.sendInput('100% POWER!')
-                elif (not self.button_data[6] and not self.button_data[7]):
-                    self.sendInput('Neutral')
+                        self.send_input('100% POWER!')
+                elif not self.button_data[6] and not self.button_data[7]:
+                    self.send_input('Neutral')
 
 
-if __name__ == "__main__":
-    ps4 = PS4Controller()
-    ps4.listen()
+if __name__ == '__main__':
+    joystick = Joystick()
+    joystick.listen()
