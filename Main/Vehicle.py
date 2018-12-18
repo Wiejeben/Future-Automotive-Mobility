@@ -1,4 +1,5 @@
 from lib.SocketClient import SocketClient
+from lib.constants import *
 
 try:
     from lib.GPIOController import GPIOController as Controller
@@ -10,7 +11,7 @@ except ModuleNotFoundError:
 class Vehicle:
     def __init__(self):
         self.controller = Controller()
-        self.client = SocketClient()
+        self.client = SocketClient(SOCKET_ID_VEHICLE)
 
     def listen(self):
         self.client.connect()

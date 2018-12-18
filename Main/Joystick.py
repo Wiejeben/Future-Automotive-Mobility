@@ -1,7 +1,7 @@
 import pygame
 from lib.SocketClient import SocketClient
+from lib.constants import *
 import numpy as np
-import time
 
 
 class Joystick(object):
@@ -15,7 +15,7 @@ class Joystick(object):
         self.button_data = None
         self.hat_data = None
 
-        self.client = SocketClient()
+        self.client = SocketClient(SOCKET_ID_JOYSTICK)
         self.client.connect()
 
         self.clock = pygame.time.Clock()

@@ -1,9 +1,10 @@
 from lib.SocketClient import SocketClient
+from lib.constants import *
 
 
 class FakeRecognition:
     def __init__(self):
-        self.client = SocketClient()
+        self.client = SocketClient(SOCKET_ID_RECOGNITION)
 
     def connect(self):
         self.client.connect()
@@ -13,8 +14,8 @@ class FakeRecognition:
 
         message = input()
 
-        if message != '1' and message != '0':
-            return
+        # if message != '1' and message != '0':
+        #     return
 
         self.client.send(message)
 
