@@ -18,10 +18,16 @@ class Vehicle:
     def on_message(self, message: str):
         print('Incoming message:', message)
 
-        if message == 'forward':
+        if message == '100% POWER':
             self.controller.forward(100)
 
-        if message == 'reverse':
+        if message == '60% POWER':
+            self.controller.forward(60)
+
+        if message == '30% POWER':
+            self.controller.forward(30)
+
+        if message == 'backward':
             self.controller.reverse(100)
 
         if message == 'brake' or message == 'stop' or message == 'neutral':

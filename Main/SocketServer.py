@@ -69,10 +69,14 @@ class SocketServer:
         """
         print('Received:', message)
 
-        if message == '1':
-            self.broadcast('neutral')
-        elif message == '0':
-            self.broadcast('forward')
+        if message == '30% POWER!':
+            self.broadcast('30% POWER')
+        elif message == '60% POWER!':
+            self.broadcast('60% POWER')
+        elif message == '100% POWER!':
+            self.broadcast('100% POWER')
+        elif message == 'backward':
+            self.broadcast('backward')
         elif message == 'bye':
             return False
         elif message == '-':

@@ -104,13 +104,17 @@ class PS4Controller(object):
                     time.sleep(0.1)
                     mappedR2Value = np.interp(self.axis_data[5], (-1,1), (0,100))
                     print('R2 is Pressed. Telling the car to go forwards with specific speed')
-                    
+                    print(mappedR2Value)
                     if(mappedR2Value < 33):
                         print('30% POWERR!')
+                        self.sendInput('30% POWER!')
                     elif(mappedR2Value < 66):
                         print('60% POWERR!')
+                        self.sendInput('60% POWER!')
                     elif(mappedR2Value <= 100):
                         print('100% POWERR!')
+                        self.sendInput('100% POWER!')
+
                 
 
 
