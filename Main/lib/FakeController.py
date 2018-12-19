@@ -15,10 +15,10 @@ class FakeController(Controller):
         print('No Steering')
 
     def forward(self, power: int = 100):
-        print('Forward')
+        print('Forward', power)
 
     def reverse(self, power: int = 100):
-        print('Reverse')
+        print('Reverse', power)
 
     def neutral(self):
         print('Neutral')

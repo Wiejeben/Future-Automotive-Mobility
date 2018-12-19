@@ -18,7 +18,7 @@ class Vehicle:
         self.client.listen(self.on_message)
 
     def on_message(self, message: str):
-        print('Incoming message:', message)
+        # print('Incoming message:', message)
 
         payload = message.split(' ')
 
@@ -26,19 +26,14 @@ class Vehicle:
         if len(payload) >= 1:
             command = payload[0]
             del payload[0]
-            # print('command: ', command)
-
 
         if len(payload) >= 1:
-            speed = int(payload[0]) or 0
-            print('params: ', speed)
+            speed = payload[0] or 0
         
         if command == SOCKET_JOY_FORWARD:
-            print('forward', speed)
             self.controller.forward(speed)
         elif command == SOCKET_JOY_BACKWARD:
-            print('backward', speed)
-            self.controller.backward(speed)
+            self.controller.reverse(speed)
         elif command == SOCKET_JOY_NEUTRAL:
             self.controller.neutral()
         elif command == SOCKET_JOY_DIR_LEFT:
