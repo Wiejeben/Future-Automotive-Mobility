@@ -36,7 +36,7 @@ class GPIOController(Controller):
         self.steering.forward()
 
     def steer_neutral(self):
-        print('No steering')
+        self.steering.neutral()
 
     def forward(self, power: int = 100):
         self.left.forward(power)

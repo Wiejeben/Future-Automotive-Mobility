@@ -75,12 +75,12 @@ class Joystick(object):
                     self.client.send_command(SOCKET_JOY_NEUTRAL)
 
                 elif button_l2:
-                    mapped_l2_value = np.interp(self.axis_data[4], (-1, 1), (0, 100))
+                    mapped_l2_value = int(np.interp(self.axis_data[4], (-1, 1), (0, 100)))
                     print('Backwards', mapped_l2_value)
                     self.client.send_command(SOCKET_JOY_BACKWARD, mapped_l2_value)
 
                 elif button_r2:
-                    mapped_r2_value = np.interp(self.axis_data[5], (-1, 1), (0, 100))
+                    mapped_r2_value = int(np.interp(self.axis_data[5], (-1, 1), (0, 100)))
                     print('Forward', mapped_r2_value)
                     self.client.send_command(SOCKET_JOY_FORWARD, mapped_r2_value)
 
