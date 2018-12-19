@@ -23,6 +23,18 @@ class GPIOController(Controller):
             pin_pwm=int(os.getenv('PIN_RIGHT_PWM'))
         )
 
+        self.steering = Actuator(
+            pin_forward=int(os.getenv('PIN_STEER_LEFT')),
+            pin_backward=int(os.getenv('PIN_STEER_RIGHT')),
+            pin_pwm=int(os.getenv('PIN_STEER_PWM'))
+        )
+
+    def steer_left(self):
+        print('Left')
+
+    def steer_right(self):
+        print('Right')
+
     def forward(self, power: int = 100):
         self.left.forward(power)
         self.right.forward(power)
