@@ -1,4 +1,4 @@
-from Controller import Controller
+from lib.Controller import Controller
 
 
 class FakeController(Controller):

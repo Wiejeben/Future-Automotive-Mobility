@@ -1,17 +1,20 @@
 # noinspection PyUnresolvedReferences
-import settings
+from lib import settings
+from pygame.threads import Thread
+from lib.constants import *
 import os
 import socket
-import select
 import time
+import select
 
 
 class SocketClient:
-    def __init__(self, on_disconnect=None):
+    def __init__(self, identity: str, on_disconnect=None):
         self.host = str(os.getenv('SOCKET_HOST', '0.0.0.0'))
         self.port = int(os.getenv('SOCKET_PORT'))
         self.connection = None
         self.on_disconnect = on_disconnect
+        self.identity = identity
 
     def connect(self, times_retrying: int = 5) -> bool:
         print('Connecting to remote host', self.host + ':' + str(self.port))
@@ -19,6 +22,10 @@ class SocketClient:
         try:
             self.connection = socket.socket()
             self.connection.connect((self.host, self.port))
+            self.send_command(self.identity)
+
+            if not self.receive() == SOCKET_ID_APPROVED:
+                return False
         except socket.error as exception:
             print('Failed to connect to server:', exception)
 
@@ -52,7 +59,7 @@ class SocketClient:
                     )
 
                     if len(ready_to_read) > 0:
-                        recv = self.connection.recv(1024).decode()
+                        recv = self.receive()
 
                         if not recv:
                             print('Server left the room')
@@ -80,8 +87,15 @@ class SocketClient:
         except KeyboardInterrupt:
             self.disconnect()
 
+    def receive(self):
+        return self.connection.recv(1024).decode()
+
     def send(self, message: str) -> None:
         self.connection.send(message.encode())
+
+    def send_command(self, command: str, *params):
+        payload = ' '.join([command] + list(params))
+        self.connection.send(payload.encode())
 
 
 if __name__ == '__main__':
@@ -90,10 +104,16 @@ if __name__ == '__main__':
 
 
     def on_message(message: str) -> None:
-        print('SERVER:', message)
+        print('Received:', message)
 
 
-    client = SocketClient(on_disconnect)
+    def communicate(client: SocketClient) -> None:
+        while True:
+            client.send(input())
+
+
+    client = SocketClient(SOCKET_ID_FAKE, on_disconnect)
 
     if client.connect():
+        Thread(target=communicate, args=(client,), daemon=True).start()
         client.listen(on_message)

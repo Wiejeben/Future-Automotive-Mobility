@@ -3,6 +3,7 @@ import sys
 from dotenv import load_dotenv
 from pathlib import Path
 
+
 load_dotenv()
 
 # OR, the same with increased verbosity:

@@ -1,15 +1,17 @@
-from SocketClient import SocketClient
+from lib.SocketClient import SocketClient
+from lib.constants import *
 
 try:
-    from GPIOController import GPIOController as Controller
+    from lib.GPIOController import GPIOController as Controller
 except ModuleNotFoundError:
-    from FakeController import FakeController as Controller
+    print('RPi.GPIO not found, falling back to faker.')
+    from lib.FakeController import FakeController as Controller
 
 
 class Vehicle:
     def __init__(self):
         self.controller = Controller()
-        self.client = SocketClient()
+        self.client = SocketClient(SOCKET_ID_VEHICLE)
 
     def listen(self):
         self.client.connect()

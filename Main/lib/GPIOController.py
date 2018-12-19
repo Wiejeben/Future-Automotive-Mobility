@@ -1,8 +1,8 @@
 # noinspection PyUnresolvedReferences
-import settings
+from lib import settings
 import os
-from Controller import Controller
-from Actuator import Actuator
+from lib.Controller import Controller
+from lib.Actuator import Actuator
 
 # noinspection PyUnresolvedReferences
 import RPi.GPIO as GPIO
