@@ -100,11 +100,15 @@ class PS4Controller(object):
                     time.sleep(0.1)
                     print('L2 is Pressed. Telling the car to go backwards')
                     self.sendInput('backward')
+
                 if(self.button_data[7]):
                     time.sleep(0.1)
+
                     mappedR2Value = np.interp(self.axis_data[5], (-1,1), (0,100))
+                    
                     print('R2 is Pressed. Telling the car to go forwards with specific speed')
                     print(mappedR2Value)
+
                     if(mappedR2Value < 33):
                         print('30% POWERR!')
                         self.sendInput('30% POWER!')
@@ -114,7 +118,9 @@ class PS4Controller(object):
                     elif(mappedR2Value <= 100):
                         print('100% POWERR!')
                         self.sendInput('100% POWER!')
+                        
                 elif(not self.button_data[6] and not self.button_data[7]):
+                    time.sleep(0.1)
                     self.sendInput('Neutral')
                 
                 
