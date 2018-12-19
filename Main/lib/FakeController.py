@@ -11,6 +11,9 @@ class FakeController(Controller):
     def steer_right(self):
         print('Right')
 
+    def steer_neutral(self):
+        print('No Steering')
+
     def forward(self, power: int = 100):
         print('Forward')
 

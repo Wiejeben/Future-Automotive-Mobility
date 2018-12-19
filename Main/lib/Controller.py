@@ -4,6 +4,9 @@ class Controller:
 
     def steer_right(self):
         pass
+    
+    def steer_neutral(self):
+        pass
 
     def forward(self, power: int = 100):
         pass

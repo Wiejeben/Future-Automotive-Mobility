@@ -29,31 +29,24 @@ class Vehicle:
             # print('command: ', command)
 
 
-        # if len(payload) >= 1:
-        #     speed = int(payload[0]) or 0
-        #     print('params: ', speed)
+        if len(payload) >= 1:
+            speed = int(payload[0]) or 0
+            print('params: ', speed)
         
-        # if command == SOCKET_JOY_FORWARD:
-        #     print('forward', speed)
-        # elif command == SOCKET_JOY_BACKWARD:
-        #     print('backward', speed)
-        # elif command == SOCKET_JOY_NEUTRAL:
-        #     print('neutral')
-
-        # if message == '100% POWER':
-        #     self.controller.forward(100)
-
-        # if message == '60% POWER':
-        #     self.controller.forward(60)
-
-        # if message == '30% POWER':
-        #     self.controller.forward(30)
-
-        # if message == 'backward':
-        #     self.controller.reverse(100)
-
-        # if message == 'brake' or message == 'stop' or message == 'neutral':
-        #     self.controller.neutral()
+        if command == SOCKET_JOY_FORWARD:
+            print('forward', speed)
+            self.controller.forward(speed)
+        elif command == SOCKET_JOY_BACKWARD:
+            print('backward', speed)
+            self.controller.backward(speed)
+        elif command == SOCKET_JOY_NEUTRAL:
+            self.controller.neutral()
+        elif command == SOCKET_JOY_DIR_LEFT:
+            self.controller.steer_left()
+        elif command == SOCKET_JOY_DIR_LEFT:
+            self.controller.steer_right()
+        elif command == SOCKET_JOY_DIR_NEUTRAL:
+            self.controller.steer_neutral()
 
 
 if __name__ == '__main__':
