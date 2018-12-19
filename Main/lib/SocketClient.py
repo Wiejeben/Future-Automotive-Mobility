@@ -1,12 +1,12 @@
-# noinspection PyUnresolvedReferences
-from lib import settings
-from pygame.threads import Thread
+from threading import Thread
 from lib.constants import *
 import os
 import socket
 import time
 import select
 
+# noinspection PyUnresolvedReferences
+from lib import settings
 
 class SocketClient:
     def __init__(self, identity: str, on_disconnect=None):
