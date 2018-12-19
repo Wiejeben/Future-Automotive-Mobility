@@ -55,6 +55,7 @@ class SocketServer:
                 break
 
             messages = data.decode().split(SOCKET_EOL)
+            # Delete last item since that is always empty
             messages.pop()
             for message in messages:
                 if not self.on_message(conn, message):
