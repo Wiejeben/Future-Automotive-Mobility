@@ -88,19 +88,17 @@ class Joystick(object):
                 elif not button_l2 and not button_r2:
                     print('Neutral')
                     self.client.send_command(SOCKET_JOY_NEUTRAL)
-                
+
                 direction = self.axis_data[0]
                 if direction == 1:
-                    #stuur rechts
+                    # stuur rechts
                     print('stuur rechts')
                 elif direction == -1:
-                    #stuur links
+                    # stuur links
                     print('stuur links')
                 else:
-                    #Stuur niet
+                    # Stuur niet
                     print('Niet sturen')
-
-                
 
 
 if __name__ == '__main__':
