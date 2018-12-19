@@ -85,25 +85,6 @@ class SocketServer:
 
         return True
 
-        # if message == '30% POWER!':
-        #     self.broadcast('30% POWER')
-        # elif message == '60% POWER!':
-        #     self.broadcast('60% POWER')
-        # elif message == '100% POWER!':
-        #     self.broadcast('100% POWER')
-        # elif message == 'backward':
-        #     self.broadcast('backward')
-        # elif message == 'Neutral':
-        #     self.broadcast('neutral')
-        # elif message == 'bye':
-        #     return False
-        # elif message == '-':
-        #     return True
-        # else:
-        #     conn.sendall(str.encode('Unknown command: ' + message))
-        #
-        # return True
-
     def parse_command(self, command: str, params: List[str]):
         if command == SOCKET_ID_RECOGNITION:
             return [SOCKET_ID_APPROVED]
@@ -135,6 +116,18 @@ class SocketServer:
 
         if command == SOCKET_DISCONNECT:
             return False
+
+        if command == SOCKET_JOY_DIR_LEFT:
+            self.broadcast_command(SOCKET_JOY_DIR_LEFT)
+            return True
+
+        if command == SOCKET_JOY_DIR_RIGHT:
+            self.broadcast_command(SOCKET_JOY_DIR_RIGHT)
+            return True
+
+        if command == SOCKET_JOY_DIR_NEUTRAL:
+            self.broadcast_command(SOCKET_JOY_DIR_NEUTRAL)
+            return True
 
         return [SOCKET_ERR_UNKNOWN]
 

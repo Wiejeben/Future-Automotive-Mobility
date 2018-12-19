@@ -93,12 +93,15 @@ class Joystick(object):
                 if direction == 1:
                     # stuur rechts
                     print('stuur rechts')
+                    self.client.send_command(SOCKET_JOY_DIR_RIGHT)
                 elif direction == -1:
                     # stuur links
                     print('stuur links')
+                    self.client.send_command(SOCKET_JOY_DIR_LEFT)
                 else:
                     # Stuur niet
                     print('Niet sturen')
+                    self.client.send_command(SOCKET_JOY_DIR_NEUTRAL)
 
 
 if __name__ == '__main__':
