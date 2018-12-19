@@ -28,7 +28,7 @@ class Vehicle:
             del payload[0]
 
         if len(payload) >= 1:
-            speed = payload[0] or 0
+            speed = int(payload[0]) or 0
 
         if command == SOCKET_JOY_FORWARD:
             self.controller.forward(speed)
