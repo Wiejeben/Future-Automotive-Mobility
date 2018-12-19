@@ -133,13 +133,12 @@ class SocketServer:
 
     def broadcast_command(self, command: str, *params):
         """Broadcasts command to all clients."""
-        payload = ' '.join([command] + list(params)).encode()
-
-        for port, client in self.clients.items():
-            client.sendall(payload)
+        payload = ' '.join([command] + list(params))
+        self.broadcast(payload)
 
     def broadcast(self, message: str):
         """Broadcasts to all clients."""
+        message += SOCKET_EOL
 
         for port, client in self.clients.items():
             client.sendall(message.encode())

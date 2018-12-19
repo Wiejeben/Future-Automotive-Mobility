@@ -29,7 +29,7 @@ class Vehicle:
 
         if len(payload) >= 1:
             speed = payload[0] or 0
-        
+
         if command == SOCKET_JOY_FORWARD:
             self.controller.forward(speed)
         elif command == SOCKET_JOY_BACKWARD:
@@ -38,7 +38,7 @@ class Vehicle:
             self.controller.neutral()
         elif command == SOCKET_JOY_DIR_LEFT:
             self.controller.steer_left()
-        elif command == SOCKET_JOY_DIR_LEFT:
+        elif command == SOCKET_JOY_DIR_RIGHT:
             self.controller.steer_right()
         elif command == SOCKET_JOY_DIR_NEUTRAL:
             self.controller.steer_neutral()

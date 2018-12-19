@@ -73,7 +73,11 @@ class SocketClient:
 
                             continue
 
-                        callback(recv)
+                        messages = recv.split(SOCKET_EOL)
+                        messages.pop()
+                        for message in messages:
+                            callback(message)
+
                 except select.error as exception:
                     print('Connection error:', exception)
 
