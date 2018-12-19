@@ -20,20 +20,40 @@ class Vehicle:
     def on_message(self, message: str):
         print('Incoming message:', message)
 
-        if message == '100% POWER':
-            self.controller.forward(100)
+        payload = message.split(' ')
 
-        if message == '60% POWER':
-            self.controller.forward(60)
+        response = True
+        if len(payload) >= 1:
+            command = payload[0]
+            del payload[0]
+            # print('command: ', command)
 
-        if message == '30% POWER':
-            self.controller.forward(30)
 
-        if message == 'backward':
-            self.controller.reverse(100)
+        # if len(payload) >= 1:
+        #     speed = int(payload[0]) or 0
+        #     print('params: ', speed)
+        
+        # if command == SOCKET_JOY_FORWARD:
+        #     print('forward', speed)
+        # elif command == SOCKET_JOY_BACKWARD:
+        #     print('backward', speed)
+        # elif command == SOCKET_JOY_NEUTRAL:
+        #     print('neutral')
 
-        if message == 'brake' or message == 'stop' or message == 'neutral':
-            self.controller.neutral()
+        # if message == '100% POWER':
+        #     self.controller.forward(100)
+
+        # if message == '60% POWER':
+        #     self.controller.forward(60)
+
+        # if message == '30% POWER':
+        #     self.controller.forward(30)
+
+        # if message == 'backward':
+        #     self.controller.reverse(100)
+
+        # if message == 'brake' or message == 'stop' or message == 'neutral':
+        #     self.controller.neutral()
 
 
 if __name__ == '__main__':

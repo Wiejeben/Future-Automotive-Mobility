@@ -125,6 +125,10 @@ class SocketServer:
 
             self.broadcast_command(SOCKET_JOY_BACKWARD, speed)
             return True
+        
+        if command == SOCKET_JOY_NEUTRAL:
+            self.broadcast_command(SOCKET_JOY_NEUTRAL)
+            return True
 
         if command == SOCKET_DISCONNECT:
             return False

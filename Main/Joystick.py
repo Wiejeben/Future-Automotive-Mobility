@@ -79,29 +79,24 @@ class Joystick(object):
                 # 11= R3
                 # 12 = PSbutton
                 # 13 = touchpad
+                
+                if self.button_data[6] and self.button_data[7]:
+                    print('Both R2 and L2 are pressed. Stopping the vehicle')
+                    self.client.send_command(SOCKET_JOY_NEUTRAL)
 
-                if self.button_data[6]:
-                    print('L2 is Pressed. Telling the car to go backwards')
-                    self.send_input('backward')
+                elif self.button_data[6]:
+                    mapped_l2_value = np.interp(self.axis_data[4], (-1, 1), (0, 100))
+                    print('Backwards', mapped_l2_value)
+                    self.client.send_command(SOCKET_JOY_BACKWARD, mapped_l2_value)
 
-                if self.button_data[7]:
+                elif self.button_data[7]:
                     mapped_r2_value = np.interp(self.axis_data[5], (-1, 1), (0, 100))
-
-                    print('R2 is Pressed. Telling the car to go forwards with specific speed')
-                    print(mapped_r2_value)
-
-                    if mapped_r2_value < 33:
-                        print('30% POWERR!')
-                        self.send_input('30% POWER!')
-                    elif mapped_r2_value < 66:
-                        print('60% POWERR!')
-                        self.send_input('60% POWER!')
-                    elif mapped_r2_value <= 100:
-                        print('100% POWERR!')
-                        self.send_input('100% POWER!')
+                    print('Forward', mapped_r2_value)
+                    self.client.send_command(SOCKET_JOY_FORWARD, mapped_r2_value)
 
                 elif not self.button_data[6] and not self.button_data[7]:
-                    self.send_input('Neutral')
+                    print('Neutral')
+                    self.client.send_command(SOCKET_JOY_NEUTRAL)
 
 
 if __name__ == '__main__':

@@ -94,7 +94,7 @@ class SocketClient:
         self.connection.send(message.encode())
 
     def send_command(self, command: str, *params):
-        payload = ' '.join([command] + list(params))
+        payload = ' '.join([command] + [str(i) for i in list(params)])
         self.connection.send(payload.encode())
 
 

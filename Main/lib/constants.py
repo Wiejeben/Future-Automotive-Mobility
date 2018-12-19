@@ -10,3 +10,4 @@ SOCKET_DISCONNECT = 'disconnect'
 
 SOCKET_JOY_FORWARD = 'joy_forward'
 SOCKET_JOY_BACKWARD = 'joy_backward'
+SOCKET_JOY_NEUTRAL = 'joy_neutral'
