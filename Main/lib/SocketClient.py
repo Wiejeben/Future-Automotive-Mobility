@@ -91,11 +91,11 @@ class SocketClient:
         return self.connection.recv(1024).decode()
 
     def send(self, message: str) -> None:
-        self.connection.send(message.encode())
+        self.connection.send((message + SOCKET_EOL).encode())
 
     def send_command(self, command: str, *params):
         payload = ' '.join([command] + [str(i) for i in list(params)])
-        self.connection.send(payload.encode())
+        self.send(payload)
 
 
 if __name__ == '__main__':
