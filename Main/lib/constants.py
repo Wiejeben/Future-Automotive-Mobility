@@ -7,6 +7,7 @@ SOCKET_ID_APPROVED = 'id_approved'
 
 SOCKET_ERR_UNKNOWN = 'unknown'
 SOCKET_DISCONNECT = 'disconnect'
+SOCKET_EOL = '<|>'
 
 SOCKET_JOY_FORWARD = 'joy_forward'
 SOCKET_JOY_BACKWARD = 'joy_backward'

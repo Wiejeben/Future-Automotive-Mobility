@@ -54,9 +54,11 @@ class SocketServer:
             if not data:
                 break
 
-            # Disconnect when on message returns False
-            if not self.on_message(conn, data.decode('utf-8')):
-                break
+            messages = data.decode().split(SOCKET_EOL)
+            messages.pop()
+            for message in messages:
+                if not self.on_message(conn, message):
+                    break
 
         print('Client (' + str(port) + ') disconnected')
         del self.clients[port]
@@ -125,7 +127,7 @@ class SocketServer:
 
             self.broadcast_command(SOCKET_JOY_BACKWARD, speed)
             return True
-        
+
         if command == SOCKET_JOY_NEUTRAL:
             self.broadcast_command(SOCKET_JOY_NEUTRAL)
             return True
