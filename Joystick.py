@@ -2,6 +2,7 @@ import pygame
 from lib.SocketClient import SocketClient
 from lib.constants import *
 import numpy as np
+import os
 
 
 class Joystick(object):
@@ -18,7 +19,7 @@ class Joystick(object):
             for i in range(self.joystick.get_numbuttons()):
                 self.button_data[i] = False
 
-        self.hat_data = {}
+        self.hat_data = {0: (0,0)}
         if len(self.hat_data):
             for i in range(self.joystick.get_numhats()):
                 self.hat_data[i] = (0, 0)
@@ -89,7 +90,7 @@ class Joystick(object):
                     print('Neutral')
                     self.client.send_command(SOCKET_JOY_NEUTRAL)
 
-                direction = self.axis_data[0]
+                direction = self.hat_data[0][0]
                 if direction == 1:
                     # stuur rechts
                     print('stuur rechts')
