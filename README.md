@@ -6,7 +6,7 @@ To install dependencies, run `pip install -r requirements.txt`.
 Make sure your environmental variables are up-to-date by comparing it to the `.env.example`.
 
 # Virtualenv
-It is recommended that you install the main application in Virtualenv. To set this up, execute `virtualenv -p python3 venv`.
+It is recommended that you install the main application in Virtualenv. To set this up, execute `virtualenv -p python3.6 venv`.
 
 In order to activate Virtualenv, execute `source venv/bin/activate`.
 
