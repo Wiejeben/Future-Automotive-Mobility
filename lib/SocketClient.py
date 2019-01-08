@@ -8,6 +8,7 @@ import select
 # noinspection PyUnresolvedReferences
 from lib import settings
 
+
 class SocketClient:
     def __init__(self, identity: str, on_disconnect=None):
         self.host = str(os.getenv('SOCKET_HOST', '0.0.0.0'))
@@ -73,8 +74,7 @@ class SocketClient:
 
                             continue
 
-                        messages = recv.split(SOCKET_EOL)
-                        messages.pop()
+                        messages = recv.strip(SOCKET_EOL).split(SOCKET_EOL)
                         for message in messages:
                             callback(message)
 

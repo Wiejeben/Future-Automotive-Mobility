@@ -15,3 +15,6 @@ SOCKET_JOY_NEUTRAL = 'joy_neutral'
 SOCKET_JOY_DIR_LEFT = 'joy_dir_left'
 SOCKET_JOY_DIR_RIGHT = 'joy_dir_right'
 SOCKET_JOY_DIR_NEUTRAL = 'joy_dir_neutral'
+
+SOCKET_MODE_BLOCKED = 'mode_blocked'
+SOCKET_MODE_FREE = 'mode_free'
