@@ -123,40 +123,6 @@ class ThreadedSocketServerClient(Thread):
         print('Received:', command, payload)
         return True
 
-    # def parse_command(self, command: str, params: List[str]):
-    #     if command == SOCKET_JOY_FORWARD:
-    #         speed = params[0] or '0'
-    #
-    #         self.broadcast_command(SOCKET_JOY_FORWARD, speed)
-    #         return True
-    #
-    #     if command == SOCKET_JOY_BACKWARD:
-    #         speed = params[0] or '0'
-    #
-    #         self.broadcast_command(SOCKET_JOY_BACKWARD, speed)
-    #         return True
-    #
-    #     if command == SOCKET_JOY_NEUTRAL:
-    #         self.broadcast_command(SOCKET_JOY_NEUTRAL)
-    #         return True
-    #
-    #     if command == SOCKET_JOY_DIR_LEFT:
-    #         self.broadcast_command(SOCKET_JOY_DIR_LEFT)
-    #         return True
-    #
-    #     if command == SOCKET_JOY_DIR_RIGHT:
-    #         self.broadcast_command(SOCKET_JOY_DIR_RIGHT)
-    #         return True
-    #
-    #     if command == SOCKET_JOY_DIR_NEUTRAL:
-    #         self.broadcast_command(SOCKET_JOY_DIR_NEUTRAL)
-    #         return True
-    #
-    #     if command == SOCKET_DISCONNECT:
-    #         return False
-    #
-    #     return [SOCKET_ERR_UNKNOWN]
-
 
 class Disconnect(ValueError):
     pass
