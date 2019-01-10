@@ -26,7 +26,8 @@ class SocketClient:
             self.send_command(self.identity)
 
             if not self.receive() == SOCKET_ID_APPROVED:
-                return False
+                print('raised exception')
+                raise Exception('Unknown identity ' + self.identity)
         except socket.error as exception:
             print('Failed to connect to server:', exception)
 
@@ -116,7 +117,8 @@ if __name__ == '__main__':
             client.send(input())
 
 
-    client = SocketClient(SOCKET_ID_FAKE, on_disconnect)
+    print('Enter identity:')
+    client = SocketClient('id_' + input(), on_disconnect)
 
     if client.connect():
         Thread(target=communicate, args=(client,), daemon=True).start()

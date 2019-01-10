@@ -5,8 +5,9 @@ SOCKET_ID_FAKE = 'id_fake'
 
 SOCKET_ID_APPROVED = 'id_approved'
 
-SOCKET_ERR_UNKNOWN = 'unknown'
+SOCKET_ERR_UNKNOWN_CMD = 'unknown_cmd'
 SOCKET_DISCONNECT = 'disconnect'
+SOCKET_BROADCAST_ALL = 'broadcast_all'
 SOCKET_EOL = '<|>'
 
 SOCKET_JOY_FORWARD = 'joy_forward'

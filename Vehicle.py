@@ -18,7 +18,7 @@ class Vehicle:
         self.client.listen(self.on_message)
 
     def on_message(self, message: str):
-        # print('Incoming message:', message)
+        print('Incoming message:', message)
 
         payload = message.split(' ')
 
@@ -27,6 +27,7 @@ class Vehicle:
             command = payload[0]
             del payload[0]
 
+        print(message)
         if len(payload) >= 1:
             speed = int(payload[0]) or 0
 

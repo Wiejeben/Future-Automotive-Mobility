@@ -1,8 +1,13 @@
+import sys
+
+SYS_OUT_OLD = sys.stdout
 import pygame
 from lib.SocketClient import SocketClient
 from lib.constants import *
 import numpy as np
 import os
+
+sys.stdout = SYS_OUT_OLD
 
 
 class Joystick(object):
@@ -19,7 +24,7 @@ class Joystick(object):
             for i in range(self.joystick.get_numbuttons()):
                 self.button_data[i] = False
 
-        self.hat_data = {0: (0,0)}
+        self.hat_data = {0: (0, 0)}
         if len(self.hat_data):
             for i in range(self.joystick.get_numhats()):
                 self.hat_data[i] = (0, 0)
@@ -28,6 +33,8 @@ class Joystick(object):
         self.client.connect()
 
         self.clock = pygame.time.Clock()
+
+        sys.stdout = SYS_OUT_OLD
 
     def listen(self):
         """Listen for events from the joystick."""

@@ -10,7 +10,7 @@ from lib.ThreadedSocketServerClient import *
 
 class SocketServer:
     def __init__(self):
-        self.clients = []
+        self.clients: List[ThreadedSocketServerClient] = []
         self.port = int(os.getenv('SOCKET_PORT'))
 
         # Create IPv4 TCP server
@@ -35,23 +35,17 @@ class SocketServer:
                     conn.close()
                 break
 
-            client = ThreadedSocketServerClient(server, conn, port)
+            client = ThreadedSocketServerClient(self, conn)
             self.clients.append(client)
             client.start()
 
-    def broadcast_command(self, command: str, *params):
+    def broadcast(self, identity, command: str, *params):
         """Broadcasts command to all clients."""
-        pass
-        # payload = ' '.join([command] + list(params))
-        # self.broadcast(payload)
+        for client in self.clients:
+            if client.identity == identity or identity == SOCKET_BROADCAST_ALL:
+                client.send(command, params)
 
-    def broadcast(self, message: str):
-        """Broadcasts to all clients."""
-        pass
-        # message += SOCKET_EOL
-        #
-        # for port, client in self.clients.items():
-        #     client.sendall(message.encode())
+        return True
 
 
 if __name__ == '__main__':
