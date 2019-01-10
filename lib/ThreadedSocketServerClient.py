@@ -73,7 +73,6 @@ class ThreadedSocketServerClient(Thread):
         if len(attributes) >= 1:
             command = attributes.pop(0)
 
-            self.client_global(command, attributes)
             if not self.client_global(command, attributes) or not self.client(command, attributes):
                 self.send(SOCKET_ERR_UNKNOWN_CMD)
 

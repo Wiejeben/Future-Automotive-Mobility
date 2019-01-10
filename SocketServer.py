@@ -1,10 +1,6 @@
 # noinspection PyUnresolvedReferences
 from typing import List
-
 import lib.settings
-import os
-from threading import Thread
-
 from lib.ThreadedSocketServerClient import *
 
 
