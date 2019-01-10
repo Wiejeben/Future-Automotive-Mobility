@@ -5,8 +5,9 @@ SOCKET_ID_FAKE = 'id_fake'
 
 SOCKET_ID_APPROVED = 'id_approved'
 
-SOCKET_ERR_UNKNOWN = 'unknown'
+SOCKET_ERR_UNKNOWN_CMD = 'unknown_cmd'
 SOCKET_DISCONNECT = 'disconnect'
+SOCKET_BROADCAST_ALL = 'broadcast_all'
 SOCKET_EOL = '<|>'
 
 SOCKET_JOY_FORWARD = 'joy_forward'
@@ -15,3 +16,6 @@ SOCKET_JOY_NEUTRAL = 'joy_neutral'
 SOCKET_JOY_DIR_LEFT = 'joy_dir_left'
 SOCKET_JOY_DIR_RIGHT = 'joy_dir_right'
 SOCKET_JOY_DIR_NEUTRAL = 'joy_dir_neutral'
+
+SOCKET_MODE_BLOCKED = 'mode_blocked'
+SOCKET_MODE_FREE = 'mode_free'

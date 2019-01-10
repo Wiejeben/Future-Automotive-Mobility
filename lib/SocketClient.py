@@ -8,6 +8,7 @@ import select
 # noinspection PyUnresolvedReferences
 from lib import settings
 
+
 class SocketClient:
     def __init__(self, identity: str, on_disconnect=None):
         self.host = str(os.getenv('SOCKET_HOST', '0.0.0.0'))
@@ -25,7 +26,8 @@ class SocketClient:
             self.send_command(self.identity)
 
             if not self.receive() == SOCKET_ID_APPROVED:
-                return False
+                print('raised exception')
+                raise Exception('Unknown identity ' + self.identity)
         except socket.error as exception:
             print('Failed to connect to server:', exception)
 
@@ -73,8 +75,7 @@ class SocketClient:
 
                             continue
 
-                        messages = recv.split(SOCKET_EOL)
-                        messages.pop()
+                        messages = recv.strip(SOCKET_EOL).split(SOCKET_EOL)
                         for message in messages:
                             callback(message)
 
@@ -116,7 +117,8 @@ if __name__ == '__main__':
             client.send(input())
 
 
-    client = SocketClient(SOCKET_ID_FAKE, on_disconnect)
+    print('Enter identity:')
+    client = SocketClient('id_' + input(), on_disconnect)
 
     if client.connect():
         Thread(target=communicate, args=(client,), daemon=True).start()
