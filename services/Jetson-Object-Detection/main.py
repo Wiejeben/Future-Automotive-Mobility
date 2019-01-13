@@ -242,7 +242,7 @@ class ObjectDetection:
                             use_normalized_coordinates=True,
                             line_thickness=4)
                         if vis_text:
-                            cv2.putText(image, "fps: {}".format(fps.fps_local()), (10, 30),
+                            cv2.putText(image, "fps: {}".format(self.fps.fps_local()), (10, 30),
                                         cv2.FONT_HERSHEY_SIMPLEX, 0.75, (77, 255, 9), 2)
                         cv2.imshow('object_detection', image)
                         # Exit Option
