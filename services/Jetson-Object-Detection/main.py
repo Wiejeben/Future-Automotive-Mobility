@@ -48,9 +48,9 @@ class ObjectDetection:
         self.cur_frames = 0
 
     def start(self):
-        graph, score, expand = self.load_frozenmodel()
+        graph = self.load_frozenmodel()
         category = self.load_labelmap()
-        self.detection(graph, category, score, expand)
+        self.detection(graph, category)
 
     def load_frozenmodel(self):
         """Load a (frozen) Tensorflow model into memory."""
@@ -63,20 +63,13 @@ class ObjectDetection:
                     serialized_graph = fid.read()
                     od_graph_def.ParseFromString(serialized_graph)
                     tf.import_graph_def(od_graph_def, name='')
-            return detection_graph, None, None
+            return detection_graph
 
         else:
             # load a frozen Model and split it into GPU and CPU graphs
             # Hardcoded for ssd_mobilenet
             input_graph = tf.Graph()
             with tf.Session(graph=input_graph):
-                if ssd_shape == 600:
-                    shape = 7326
-                else:
-                    shape = 1917
-                score = tf.placeholder(tf.float32, shape=(None, shape, num_classes),
-                                       name="Postprocessor/convert_scores")
-                expand = tf.placeholder(tf.float32, shape=(None, shape, 1, 4), name="Postprocessor/ExpandDims_1")
                 for node in input_graph.as_graph_def().node:
                     if node.name == "Postprocessor/convert_scores":
                         score_def = node
@@ -137,7 +130,7 @@ class ObjectDetection:
                     with tf.device('/cpu:0'):
                         tf.import_graph_def(remove, name='')
 
-            return detection_graph, score, expand
+            return detection_graph
 
     @staticmethod
     def load_labelmap():
@@ -149,7 +142,7 @@ class ObjectDetection:
         category_index = label_map_util.create_category_index(categories)
         return category_index
 
-    def detection(self, detection_graph, category_index, score, expand):
+    def detection(self, detection_graph, category_index):
         print("> Building Graph")
         # Session Config: allow seperate GPU/CPU adressing and limit memory allocation
         config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=log_device)
@@ -176,7 +169,7 @@ class ObjectDetection:
                     gpu_counter = 0
                     cpu_counter = 0
                 # Start Video Stream and FPS calculation
-                fps = FPS(fps_interval).start()
+                self.fps = FPS(fps_interval).start()
                 self.video_stream = WebcamVideoStream(video_input, width, height).start()
 
                 print("> Press 'q' to Exit")
