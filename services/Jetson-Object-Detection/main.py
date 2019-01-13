@@ -152,7 +152,6 @@ class ObjectDetection:
         print("> Building Graph")
         # Session Config: allow seperate GPU/CPU adressing and limit memory allocation
         config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=log_device)
-        config.gpu_options.per_process_gpu_memory_fraction = 0.8
         config.gpu_options.allow_growth = allow_memory_growth
 
         with detection_graph.as_default():
