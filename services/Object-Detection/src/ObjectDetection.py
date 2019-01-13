@@ -8,7 +8,7 @@ import cv2
 from src.FPS import FPS
 
 # Define object detection models and labels
-PATH_TO_CKPT = 'model/frozen_inference_graph.pb' # SSD model
+PATH_TO_CKPT = 'model/frozen_inference_graph.pb'  # SSD model
 PATH_TO_LABELS = 'model/mscoco_label_map.pbtxt'
 NUM_CLASSES = 90
 
@@ -69,10 +69,15 @@ class ObjectDetection:
             with tf.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
                 serialized_graph = fid.read()
                 od_graph_def.ParseFromString(serialized_graph)
-                tf.import_graph_def(od_graph_def, name='')
-            sess = tf.Session(graph=detection_graph)
+                with tf.device('/gpu:0'):
+                    tf.import_graph_def(od_graph_def, name='')
+
+            config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)
+            config.gpu_options.allow_growth = True
+            sess = tf.Session(graph=detection_graph, config=config)
 
         fps = FPS().start()
+
         while True:
             fps.update()
             frame = input_q.get()
