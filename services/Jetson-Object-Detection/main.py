@@ -136,8 +136,9 @@ def load_frozenmodel():
 def load_labelmap():
     print('> Loading label map')
     label_map = label_map_util.load_labelmap(label_path)
-    categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=num_classes,
-                                                                use_display_name=True)
+    categories = label_map_util.convert_label_map_to_categories(
+        label_map, max_num_classes=num_classes, use_display_name=True
+    )
     category_index = label_map_util.create_category_index(categories)
     return category_index
 
@@ -233,7 +234,7 @@ def detection(detection_graph, category_index, score, expand):
                         np.squeeze(scores),
                         category_index,
                         use_normalized_coordinates=True,
-                        line_thickness=8)
+                        line_thickness=4)
                     if vis_text:
                         cv2.putText(image, "fps: {}".format(fps.fps_local()), (10, 30),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (77, 255, 9), 2)
@@ -241,15 +242,15 @@ def detection(detection_graph, category_index, score, expand):
                     # Exit Option
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         break
-                else:
-                    cur_frames += 1
-                    # Exit after max frames if no visualization
-                    for box, score, _class in zip(np.squeeze(boxes), np.squeeze(scores), np.squeeze(classes)):
-                        if cur_frames % det_interval == 0 and score > det_th:
-                            label = category_index[_class]['name']
-                            print("> label: {}\nscore: {}\nbox: {}".format(label, score, box))
-                    if cur_frames >= max_frames:
-                        break
+                # else:
+                cur_frames += 1
+                # Exit after max frames if no visualization
+                for box, score, _class in zip(np.squeeze(boxes), np.squeeze(scores), np.squeeze(classes)):
+                    if cur_frames % det_interval == 0 and score > det_th:
+                        label = category_index[_class]['name']
+                        print("> label: {}\nscore: {}\nbox: {}".format(label, score, box))
+                    # if cur_frames >= max_frames:
+                    #     break
                 fps.update()
 
     # End everything
