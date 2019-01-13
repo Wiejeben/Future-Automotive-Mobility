@@ -4,8 +4,6 @@ import tensorflow as tf
 import copy
 import yaml
 import cv2
-import tarfile
-import six.moves.urllib as urllib
 import time
 from lib import FPS, WebcamVideoStream, SessionWorker
 
@@ -38,24 +36,6 @@ num_classes = cfg['num_classes']
 split_model = cfg['split_model']
 log_device = cfg['log_device']
 ssd_shape = cfg['ssd_shape']
-
-
-# Download Model form TF's Model Zoo
-def download_model():
-    model_file = model_name + '.tar.gz'
-    download_base = 'http://download.tensorflow.org/models/object_detection/'
-    if not os.path.isfile(model_path):
-        print('> Model not found. Downloading it now.')
-        opener = urllib.request.URLopener()
-        opener.retrieve(download_base + model_file, model_file)
-        tar_file = tarfile.open(model_file)
-        for file in tar_file.getmembers():
-            file_name = os.path.basename(file.name)
-            if 'frozen_inference_graph.pb' in file_name:
-                tar_file.extract(file, os.getcwd() + '/models/')
-        os.remove(os.getcwd() + '/' + model_file)
-    else:
-        print('> Model found. Proceed.')
 
 
 # helper function for split model
@@ -284,7 +264,6 @@ def detection(detection_graph, category_index, score, expand):
 
 
 def main():
-    download_model()
     graph, score, expand = load_frozenmodel()
     category = load_labelmap()
     detection(graph, category, score, expand)
