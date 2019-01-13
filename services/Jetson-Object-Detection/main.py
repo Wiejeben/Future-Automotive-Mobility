@@ -37,7 +37,7 @@ split_model = cfg['split_model']
 log_device = cfg['log_device']
 ssd_shape = cfg['ssd_shape']
 
-class ObjectDetection:
+
 # helper function for split model
 def _node_name(n):
     if n.startswith("^"):
