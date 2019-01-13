@@ -70,6 +70,13 @@ class ObjectDetection:
             # Hardcoded for ssd_mobilenet
             input_graph = tf.Graph()
             with tf.Session(graph=input_graph):
+                if ssd_shape == 600:
+                    shape = 7326
+                else:
+                    shape = 1917
+                score = tf.placeholder(tf.float32, shape=(None, shape, num_classes),
+                                       name="Postprocessor/convert_scores")
+                expand = tf.placeholder(tf.float32, shape=(None, shape, 1, 4), name="Postprocessor/ExpandDims_1")
                 for node in input_graph.as_graph_def().node:
                     if node.name == "Postprocessor/convert_scores":
                         score_def = node
