@@ -10,7 +10,7 @@ class WebcamVideoStream:
         self.frame_counter = 1
         self.width = width
         self.height = height
-        self.stream = cv2.VideoCapture("nvcamerasrc ! video/x-raw(memory:NVMM), width=(int)640, height=(int)480, format=(string)I420, framerate=(fraction)30/1 ! nvvidconv ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink")
+        self.stream = cv2.VideoCapture("nvcamerasrc ! video/x-raw(memory:NVMM), width=(int)600, height=(int)600, format=(string)I420, framerate=(fraction)30/1 ! nvvidconv ! video/x-raw, format=(string)BGRx ! videoconvert ! video/x-raw, format=(string)BGR ! appsink")
         self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         (self.grabbed, self.frame) = self.stream.read()
