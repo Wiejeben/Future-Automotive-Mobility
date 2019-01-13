@@ -1,6 +1,6 @@
 ---
 ## Detection
-video_input: 0              # Input Must be OpenCV readable
+video_input: 1              # Input Must be OpenCV readable
 visualize: True             # Disable for performance increase
 vis_text: True              # Display fps on visualization stream
 max_frames: 5000            # only used if visualize==False
@@ -17,6 +17,6 @@ ssd_shape: 300              # used for the split model algorithm
 
 ## Model
 model_name: 'ssd_mobilenet_v11_coco'
-model_path: 'models/ssd_mobilenet_v11_coco/froze_inference_graph.pb'
+model_path: 'models/ssd_mobilenet_v11_coco/frozen_inference_graph.pb'
 label_path: 'models/ssd_mobilenet_v11_coco/mscoco_label_map.pbtxt'
 num_classes: 90
