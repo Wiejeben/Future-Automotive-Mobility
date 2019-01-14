@@ -46,11 +46,15 @@ class ObjectDetection:
         self.cpu_worker = None
         self.gpu_worker = None
         self.cur_frames = 0
-        self.category_index = None
 
     def start(self):
-        self.category_index = self.load_labelmap()
-        self.detection()
+        try:
+            category = self.load_labelmap()
+            graph = self.load_frozenmodel()
+            self.detection(graph, category)
+        except tf.errors.InternalError:
+            print('> [tf.errors.InternalError] Tensorflow failure, retrying...')
+            self.start()
 
     def load_frozenmodel(self):
         """Load a (frozen) Tensorflow model into memory."""
@@ -148,18 +152,6 @@ class ObjectDetection:
         category_index = label_map_util.create_category_index(categories)
         return category_index
 
-    def detection(self):
-        """
-        Our development board seems to sometimes fails to startup the object detection.
-        This function should recursively keep retrying to initialize the script.
-        """
-        try:
-            graph = self.load_frozenmodel()
-            self._detection_run(graph, self.category_index)
-        except tf.errors.InternalError:
-            print('> [tf.errors.InternalError] Tensorflow failure, retrying...')
-            self.detection()
-
     def exit(self):
         """End everything"""
         if split_model:
@@ -171,7 +163,7 @@ class ObjectDetection:
         print('> [INFO] elapsed time (total): {:.2f}'.format(self.fps.elapsed()))
         print('> [INFO] approx. FPS: {:.2f}'.format(self.fps.fps()))
 
-    def _detection_run(self, detection_graph, category_index):
+    def detection(self, detection_graph, category_index):
         print("> Building Graph")
         # Session Config: allow seperate GPU/CPU adressing and limit memory allocation
         config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=log_device)
