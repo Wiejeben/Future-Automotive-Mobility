@@ -49,13 +49,12 @@ class ObjectDetection:
 
     def start(self):
         try:
-            category = self.load_labelmap()
-            graph = self.load_frozenmodel()
-            self.detection(graph, category)
+            with self.load_labelmap() as category:
+                with self.load_frozenmodel() as graph:
+                    self.detection(graph, category)
         except tf.errors.InternalError:
             print('> [tf.errors.InternalError] Tensorflow failure, retrying...')
             tf.reset_default_graph()
-            self.exit()
             self.start()
 
     def load_frozenmodel(self):
