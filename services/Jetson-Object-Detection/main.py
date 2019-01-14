@@ -54,6 +54,7 @@ class ObjectDetection:
             self.detection(graph, category)
         except tf.errors.InternalError:
             print('> [tf.errors.InternalError] Tensorflow failure, retrying...')
+            tf.reset_default_graph()
             self.start()
 
     def load_frozenmodel(self):
