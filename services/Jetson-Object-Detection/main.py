@@ -46,11 +46,11 @@ class ObjectDetection:
         self.cpu_worker = None
         self.gpu_worker = None
         self.cur_frames = 0
+        self.category_index = None
 
     def start(self):
-        graph = self.load_frozenmodel()
-        category = self.load_labelmap()
-        self.detection(graph, category)
+        self.category_index = self.load_labelmap()
+        self.detection()
 
     def load_frozenmodel(self):
         """Load a (frozen) Tensorflow model into memory."""
@@ -148,16 +148,17 @@ class ObjectDetection:
         category_index = label_map_util.create_category_index(categories)
         return category_index
 
-    def detection(self, detection_graph, category_index):
+    def detection(self):
         """
         Our development board seems to sometimes fails to startup the object detection.
         This function should recursively keep retrying to initialize the script.
         """
         try:
-            self._detection_run(detection_graph, category_index)
+            graph = self.load_frozenmodel()
+            self._detection_run(graph, self.category_index)
         except tf.errors.InternalError:
-            print('> [tf.errors.InternalError] CUDA failure, retrying...')
-            self.detection(detection_graph, category_index)
+            print('> [tf.errors.InternalError] Tensorflow failure, retrying...')
+            self.detection()
 
     def exit(self):
         """End everything"""
@@ -205,7 +206,7 @@ class ObjectDetection:
                 while self.video_stream.isActive():
                     # actual Detection
                     if split_model:
-                        # split model in seperate gpu and cpu session threads
+                        # split model in separate gpu and cpu session threads
                         if self.gpu_worker.is_sess_empty():
                             # read video frame, expand dimensions and convert to rgb
                             image = self.video_stream.read()
