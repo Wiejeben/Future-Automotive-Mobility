@@ -149,6 +149,28 @@ class ObjectDetection:
         return category_index
 
     def detection(self, detection_graph, category_index):
+        """
+        Our development board seems to sometimes fails to startup the object detection.
+        This function should recursively keep retrying to initialize the script.
+        """
+        try:
+            self._detection_run(detection_graph, category_index)
+        except tf.errors.InternalError:
+            print('> [tf.errors.InternalError] CUDA failure, retrying...')
+            self.detection(detection_graph, category_index)
+
+    def exit(self):
+        """End everything"""
+        if split_model:
+            self.gpu_worker.stop()
+            self.cpu_worker.stop()
+        self.fps.stop()
+        self.video_stream.stop()
+        cv2.destroyAllWindows()
+        print('> [INFO] elapsed time (total): {:.2f}'.format(self.fps.elapsed()))
+        print('> [INFO] approx. FPS: {:.2f}'.format(self.fps.fps()))
+
+    def _detection_run(self, detection_graph, category_index):
         print("> Building Graph")
         # Session Config: allow seperate GPU/CPU adressing and limit memory allocation
         config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=log_device)
@@ -262,17 +284,6 @@ class ObjectDetection:
             return n[1:]
         else:
             return n.split(":")[0]
-
-    def exit(self):
-        """End everything"""
-        if split_model:
-            self.gpu_worker.stop()
-            self.cpu_worker.stop()
-        self.fps.stop()
-        self.video_stream.stop()
-        cv2.destroyAllWindows()
-        print('> [INFO] elapsed time (total): {:.2f}'.format(self.fps.elapsed()))
-        print('> [INFO] approx. FPS: {:.2f}'.format(self.fps.fps()))
 
 
 if __name__ == '__main__':
