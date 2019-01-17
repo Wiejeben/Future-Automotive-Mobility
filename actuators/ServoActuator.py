@@ -10,18 +10,21 @@ class ServoActuator(Actuator):
         self.power = GPIO.PWM(pin, 100)
         self.power.start(0)
 
+        self.base = 6
+        self.power_division = 200
+
         super().__init__()
 
     def forward(self, power: int = 100):
-        self.power.ChangeDutyCycle(power)
+        self.power.ChangeDutyCycle(self.base + (power / 200))
         super().forward(power)
 
     def reverse(self, power: int = 100):
-        self.power.ChangeDutyCycle(power)
+        self.power.ChangeDutyCycle(self.base - (power / 200))
         super().reverse(power)
 
     def neutral(self):
-        self.power.ChangeDutyCycle(0)
+        self.power.ChangeDutyCycle(self.base)
         super().neutral()
 
     def exit(self):
