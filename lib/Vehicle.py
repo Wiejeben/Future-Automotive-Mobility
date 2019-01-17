@@ -31,6 +31,7 @@ class Vehicle:
             time.sleep(0.1)
 
     def on_message(self, message: str):
+        print('Received message', message)
         payload = message.split(' ')
 
         # Get command
