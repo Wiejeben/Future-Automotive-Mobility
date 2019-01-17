@@ -11,7 +11,7 @@ class ServoActuator(Actuator):
         self.power.start(0)
 
         self.base = 6
-        self.power_division = 200
+        self.power_division = 100
 
         super().__init__()
 
