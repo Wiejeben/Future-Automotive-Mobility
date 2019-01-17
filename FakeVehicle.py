@@ -1,5 +1,5 @@
 from controllers.FakeController import FakeController
-from vehicles.Vehicle import Vehicle
+from lib.Vehicle import Vehicle
 
 
 class FakeVehicle(Vehicle):

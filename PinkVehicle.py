@@ -1,5 +1,5 @@
 from controllers.HBridgeController import HBridgeController
-from vehicles.Vehicle import Vehicle
+from lib.Vehicle import Vehicle
 
 
 class PinkVehicle(Vehicle):

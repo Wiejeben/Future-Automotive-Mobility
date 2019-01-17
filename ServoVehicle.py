@@ -1,5 +1,5 @@
 from controllers.ServoController import ServoController
-from vehicles.Vehicle import Vehicle
+from lib.Vehicle import Vehicle
 
 
 class ServoVehicle(Vehicle):
