@@ -24,7 +24,7 @@ class ServoActuator(Actuator):
     def reverse(self, power: int = 100):
         dc = self.base - (power / 200)
         print(dc)
-        self.power.ChangeDutyCycle()
+        self.power.ChangeDutyCycle(dc)
         super().reverse(power)
 
     def neutral(self):
