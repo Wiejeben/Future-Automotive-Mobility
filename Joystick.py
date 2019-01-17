@@ -131,7 +131,7 @@ class Joystick(object):
                 self.client.send_command(SOCKET_JOY_BACKWARD, self.reverse)
             else:
                 print('Neutral')
-                self.client.send_command(SOCKET_JOY_DIR_NEUTRAL)
+                self.client.send_command(SOCKET_JOY_NEUTRAL)
 
 
 if __name__ == '__main__':
