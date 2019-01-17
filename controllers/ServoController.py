@@ -12,9 +12,6 @@ class ServoController(Controller):
         GPIO.setmode(GPIO.BOARD)
         self.servo = Actuator(int(os.getenv('PIN_SERVO_PWM')))
 
-    def steer_neutral(self):
-        self.servo.neutral()
-
     def forward(self, power: int = 100):
         self.servo.forward(power)
 
