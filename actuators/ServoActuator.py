@@ -6,6 +6,7 @@ from actuators.Actuator import Actuator
 
 class ServoActuator(Actuator):
     def __init__(self, pin: int):
+        GPIO.setup(pin, GPIO.OUT)
         self.power = GPIO.PWM(pin, 100)
         self.power.start(0)
 
