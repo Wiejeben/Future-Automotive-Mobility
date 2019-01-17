@@ -1,10 +1,13 @@
+from lib import settings
+
+
 class Controller:
     def steer_left(self):
         pass
 
     def steer_right(self):
         pass
-    
+
     def steer_neutral(self):
         pass
 

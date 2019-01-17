@@ -1,14 +1,13 @@
 # noinspection PyUnresolvedReferences
-from lib import settings
+from actuators.HBridgeActuator import HBridgeActuator as Actuator
 import os
-from lib.Controller import Controller
-from lib.Actuator import Actuator
+from controllers.Controller import Controller
 
 # noinspection PyUnresolvedReferences
 import RPi.GPIO as GPIO
 
 
-class GPIOController(Controller):
+class HBridgeController(Controller):
     def __init__(self):
         GPIO.setmode(GPIO.BOARD)
         self.left = Actuator(

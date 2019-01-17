@@ -1,9 +1,12 @@
 # noinspection PyUnresolvedReferences
 import RPi.GPIO as GPIO
 
+from actuators.Actuator import Actuator
 
-class Actuator:
+
+class HBridgeActuator(Actuator):
     def __init__(self, pin_forward: int, pin_backward: int, pin_pwm: int):
+        super().__init__()
         self.pin_forward = pin_forward
         self.pin_backward = pin_backward
         self.pin_pwm = pin_pwm
@@ -15,37 +18,30 @@ class Actuator:
         self.power = GPIO.PWM(pin_pwm, 100)
         self.power.start(0)
 
-        # -1 = reverse
-        # 0 = neutral
-        # 1 = forward
-        self.direction = 0
-
     def forward(self, power: int = 100):
-        print('Forward')
-
         if self.direction != 1:
             GPIO.output(self.pin_forward, GPIO.HIGH)
             GPIO.output(self.pin_backward, GPIO.LOW)
-            self.direction = 1
 
         self.power.ChangeDutyCycle(power)
+        super().forward(power)
 
     def reverse(self, power: int = 100):
-        print('Reverse')
-
         if self.direction != -1:
             GPIO.output(self.pin_forward, GPIO.LOW)
             GPIO.output(self.pin_backward, GPIO.HIGH)
-            self.direction = -1
 
         self.power.ChangeDutyCycle(power)
+        super().reverse(power)
 
     def neutral(self):
         GPIO.output(self.pin_backward, GPIO.LOW)
         GPIO.output(self.pin_forward, GPIO.LOW)
         self.power.ChangeDutyCycle(0)
-        self.direction = 0
+
+        super().neutral()
 
     def exit(self):
         self.neutral()
         self.power.stop()
+        super().exit()
