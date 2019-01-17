@@ -16,14 +16,19 @@ class ServoActuator(Actuator):
         super().__init__()
 
     def forward(self, power: int = 100):
-        self.power.ChangeDutyCycle(self.base + (power / 200))
+        dc = self.base + (power / 200)
+        print(dc)
+        self.power.ChangeDutyCycle(dc)
         super().forward(power)
 
     def reverse(self, power: int = 100):
-        self.power.ChangeDutyCycle(self.base - (power / 200))
+        dc = self.base - (power / 200)
+        print(dc)
+        self.power.ChangeDutyCycle()
         super().reverse(power)
 
     def neutral(self):
+        print(self.base)
         self.power.ChangeDutyCycle(self.base)
         super().neutral()
 
