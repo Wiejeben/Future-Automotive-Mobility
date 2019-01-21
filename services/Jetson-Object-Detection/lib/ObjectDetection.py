@@ -1,5 +1,5 @@
 import copy
-from builtins import Exception
+from builtins import staticmethod, ord, sorted, set, list
 
 import cv2
 import numpy as np
@@ -8,11 +8,14 @@ import time
 # Tensorflow
 import tensorflow as tf
 from tensorflow.core.framework import graph_pb2
+# noinspection PyUnresolvedReferences
 from object_detection.utils import label_map_util
+# noinspection PyUnresolvedReferences
 from object_detection.utils import visualization_utils as vis_util
 
 # Internal
 from lib.FPS import FPS
+from lib.ThreadedSocketClient import ThreadedSocketClient
 from lib.WebcamVideoStream import WebcamVideoStream
 from lib.SessionWorker import SessionWorker
 
@@ -21,6 +24,7 @@ class ObjectDetection:
     # helper function for split model
     def __init__(self, config):
         self.video_stream = None
+        self.socket_client = None
         self.fps = None
         self.cpu_worker = None
         self.gpu_worker = None
@@ -125,16 +129,17 @@ class ObjectDetection:
         categories = label_map_util.convert_label_map_to_categories(
             label_map, max_num_classes=self.config['num_classes'], use_display_name=True
         )
-        category_index = label_map_util.create_category_index(categories)
-        return category_index
+        return label_map_util.create_category_index(categories)
 
     def exit(self):
         """End everything"""
         if self.config['split_model']:
             self.gpu_worker.stop()
             self.cpu_worker.stop()
+
         self.fps.stop()
         self.video_stream.stop()
+        self.socket_client.stop()
         cv2.destroyAllWindows()
         print('> [INFO] elapsed time (total): {:.2f}'.format(self.fps.elapsed()))
         print('> [INFO] approx. FPS: {:.2f}'.format(self.fps.fps()))
@@ -159,18 +164,25 @@ class ObjectDetection:
                     score_in = detection_graph.get_tensor_by_name('Postprocessor/convert_scores_1:0')
                     expand_in = detection_graph.get_tensor_by_name('Postprocessor/ExpandDims_1_1:0')
                     # Threading
-                    self.gpu_worker = SessionWorker("GPU", detection_graph, config)
-                    self.cpu_worker = SessionWorker("CPU", detection_graph, config)
+                    self.gpu_worker = SessionWorker('GPU', detection_graph, config)
+                    self.cpu_worker = SessionWorker('CPU', detection_graph, config)
                     gpu_opts = [score_out, expand_out]
                     cpu_opts = [detection_boxes, detection_scores, detection_classes, num_detections]
                     gpu_counter = 0
                     cpu_counter = 0
                 # Start Video Stream and FPS calculation
                 self.fps = FPS(self.config['fps_interval']).start()
-                self.video_stream = WebcamVideoStream(self.config['video_input'], self.config['width'],
-                                                      self.config['height']).start()
+                self.video_stream = WebcamVideoStream(
+                    self.config['video_input'],
+                    self.config['width'],
+                    self.config['height']).start()
 
-                print("> Press 'q' to Exit")
+                self.socket_client = ThreadedSocketClient(
+                    category_index,
+                    self.config['det_th'],
+                    self.config['det_interval']).start()
+
+                print('> Press \'q\' to Exit')
                 print('> Starting Detection')
                 while self.video_stream.is_active():
                     # actual Detection
@@ -194,7 +206,7 @@ class ObjectDetection:
                         else:
                             # gpu thread has output queue.
                             gpu_counter = 0
-                            score, expand, image = g["results"][0], g["results"][1], g["extras"]
+                            score, expand, image = g['results'][0], g['results'][1], g['extras']
 
                             if self.cpu_worker.is_sess_empty():
                                 # When cpu thread has no next queue, put new queue.
@@ -239,11 +251,9 @@ class ObjectDetection:
                         if cv2.waitKey(1) & 0xFF == ord('q'):
                             break
 
-                    self.cur_frames += 1
-                    for box, score, _class in zip(np.squeeze(boxes), np.squeeze(scores), np.squeeze(classes)):
-                        if self.cur_frames % self.config['det_interval'] == 0 and score > self.config['det_th']:
-                            label = category_index[_class]['name']
-                            print("==========\nlabel: {}\nscore: {}\nbox: {}".format(label, score, box))
+                    self.socket_client.boxes = boxes
+                    self.socket_client.scores = scores
+                    self.socket_client.classes = classes
 
                     self.fps.update()
 

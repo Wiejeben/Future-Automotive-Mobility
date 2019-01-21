@@ -4,7 +4,7 @@ import queue as Queue
 import time
 
 
-class SessionWorker():
+class SessionWorker:
     def __init__(self, tag, graph, config):
         self.lock = threading.Lock()
         self.sess_queue = Queue.Queue()
