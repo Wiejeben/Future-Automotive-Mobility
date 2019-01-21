@@ -1,3 +1,4 @@
+import time
 from builtins import zip
 from threading import Thread
 import numpy as np
@@ -19,6 +20,8 @@ class ThreadedSocketClient(Thread):
     def run(self):
         current_frames = 0
         while True:
+            # Limit to 5 times per second
+            time.sleep(0.2)
             if self.boxes is None or self.scores is None or self.classes is None:
                 continue
 
