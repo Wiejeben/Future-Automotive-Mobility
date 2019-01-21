@@ -180,7 +180,8 @@ class ObjectDetection:
                 self.socket_client = ThreadedSocketClient(
                     category_index,
                     self.config['det_th'],
-                    self.config['det_interval']).start()
+                    self.config['det_interval'])
+                self.socket_client.start()
 
                 print('> Press \'q\' to Exit')
                 print('> Starting Detection')
