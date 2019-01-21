@@ -105,7 +105,7 @@ class SocketClient:
 
 if __name__ == '__main__':
     def on_disconnect() -> None:
-        print('SHUTDOWN YOUR ENGINES')
+        print('Server disconnected')
 
 
     def on_message(message: str) -> None:

@@ -18,7 +18,7 @@ class SocketServer:
         """Listens for connecting clients and creates a thread for each connection."""
         self.socket.listen(5)
 
-        print('> [INFO] Server is available on port', self.port)
+        print('Server is available on port', self.port)
 
         while True:
             connection = None

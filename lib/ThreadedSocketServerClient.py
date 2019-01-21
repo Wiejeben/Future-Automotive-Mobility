@@ -18,17 +18,18 @@ class ThreadedSocketServerClient(Thread):
         self.client = None
 
     def run(self):
-        try:
-            self.client = self.identify()
-            self.conn.sendall(SOCKET_ID_APPROVED.encode())
-            print('Connected', self.identity)
-            self.listen()
-            print('Disconnected', self.identity)
-        except Exception as e:
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            print('EXCEPTION:', e, 'in ' + fname + ' line ' + str(exc_tb.tb_lineno))
-            self.disconnect()
+        # try:
+        self.client = self.identify()
+        self.conn.sendall(SOCKET_ID_APPROVED.encode())
+        print('Connected', self.identity)
+        self.listen()
+        print('Disconnected', self.identity)
+
+    # except Exception as e:
+    #     exc_type, exc_obj, exc_tb = sys.exc_info()
+    #     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    #     print('EXCEPTION:', e, 'in ' + fname + ' line ' + str(exc_tb.tb_lineno))
+    #     self.disconnect()
 
     def identify(self):
         """Assigns client based on identification."""
@@ -77,8 +78,15 @@ class ThreadedSocketServerClient(Thread):
                 self.send(SOCKET_ERR_UNKNOWN_CMD)
 
     def send(self, command, *params):
-        message = (command + ' ' + ' '.join(params[0])).strip() + SOCKET_EOL
-        self.conn.sendall(message.encode())
+        if len(params) >= 1:
+            command += ' ' + ' '.join(params[0])
+
+        message = command.strip() + SOCKET_EOL
+        try:
+            self.conn.sendall(message.encode())
+            return True
+        except BrokenPipeError:
+            return False
 
     def disconnect(self):
         print('Disconnecting connection with identity', self.identity)
@@ -96,10 +104,16 @@ class ThreadedSocketServerClient(Thread):
 
     def client_joystick(self, command, payload):
         if command == SOCKET_JOY_FORWARD:
-            return self.server.broadcast(SOCKET_ID_VEHICLE, SOCKET_JOY_FORWARD, payload[0] or '0')
+            speed = '0'
+            if len(payload) >= 1:
+                speed = payload[0]
+            return self.server.broadcast(SOCKET_ID_VEHICLE, SOCKET_JOY_FORWARD, speed)
 
         if command == SOCKET_JOY_BACKWARD:
-            return self.server.broadcast(SOCKET_ID_VEHICLE, SOCKET_JOY_BACKWARD, payload[0] or '0')
+            speed = '0'
+            if len(payload) >= 1:
+                speed = payload[0]
+            return self.server.broadcast(SOCKET_ID_VEHICLE, SOCKET_JOY_BACKWARD, speed)
 
         if command == SOCKET_JOY_NEUTRAL:
             return self.server.broadcast(SOCKET_ID_VEHICLE, SOCKET_JOY_NEUTRAL)
