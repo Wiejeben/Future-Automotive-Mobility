@@ -21,7 +21,7 @@ class ThreadedSocketClient(Thread):
         current_frames = 0
         while True:
             # Limit to 5 times per second
-            time.sleep(0.2)
+            time.sleep(0.1)
             if self.boxes is None or self.scores is None or self.classes is None:
                 continue
 
