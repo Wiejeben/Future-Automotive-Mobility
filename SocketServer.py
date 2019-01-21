@@ -36,6 +36,7 @@ class SocketServer:
             client.start()
 
     def broadcast(self, identity, command: str, *params):
+        # print('[BROADCAST]', identity, command, params)
         """Broadcasts command to all clients."""
         for client in self.clients:
             if client.identity == identity or identity == SOCKET_BROADCAST_ALL:

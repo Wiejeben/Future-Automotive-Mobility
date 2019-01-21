@@ -1,6 +1,7 @@
 from threading import Thread
 
 from controllers import Controller
+from controllers.FakeController import FakeController
 from lib.SocketClient import SocketClient
 from lib.constants import *
 import time
@@ -11,6 +12,7 @@ class Vehicle:
         self.controller = controller
         self.client = SocketClient(SOCKET_ID_VEHICLE)
         self.last_message = time.time()
+        self.blocked = False
 
     def listen(self):
         self.client.connect()
@@ -25,7 +27,13 @@ class Vehicle:
         while True:
             now = time.time()
             difference = now - self.last_message
+
+            # Put vehicle into neutral after 1 second
             if difference > 1:
+                self.controller.neutral()
+
+            # Force vehicle into neutral
+            if self.blocked:
                 self.controller.neutral()
 
             time.sleep(0.1)
@@ -44,14 +52,19 @@ class Vehicle:
         if len(payload) >= 1:
             speed = int(payload[0])
 
-        if command == SOCKET_JOY_FORWARD:
-            self.controller.forward(speed)
+        # Prevent accelerating when blocked
+        if not self.blocked:
+            if command == SOCKET_JOY_FORWARD:
+                self.controller.forward(speed)
 
-        if command == SOCKET_JOY_BACKWARD:
-            self.controller.reverse(speed)
+            if command == SOCKET_JOY_BACKWARD:
+                self.controller.reverse(speed)
 
         if command == SOCKET_JOY_NEUTRAL:
             self.controller.neutral()
+
+        if command == SOCKET_JOY_DIR_NEUTRAL:
+            self.controller.steer_neutral()
 
         if command == SOCKET_JOY_DIR_LEFT:
             self.controller.steer_left()
@@ -59,12 +72,13 @@ class Vehicle:
         if command == SOCKET_JOY_DIR_RIGHT:
             self.controller.steer_right()
 
-        if command == SOCKET_JOY_DIR_NEUTRAL:
-            self.controller.steer_neutral()
+        if command == SOCKET_RECOGNITION_DETECTED:
+            print('[INFO] Stopping for detected person')
+            self.blocked = True
+            self.controller.neutral()
+
+        if command == SOCKET_RECOGNITION_FREE:
+            print('[INFO] Continue now that blockade is gone')
+            self.blocked = False
 
         self.last_message = time.time()
-
-
-if __name__ == '__main__':
-    vehicle = Vehicle()
-    vehicle.listen()

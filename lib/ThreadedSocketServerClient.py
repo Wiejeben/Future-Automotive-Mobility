@@ -116,7 +116,13 @@ class ThreadedSocketServerClient(Thread):
         return False
 
     def client_recognition(self, command, payload):
-        print('Recognition')
+        if command == SOCKET_RECOGNITION_DETECTED:
+            return self.server.broadcast(SOCKET_ID_VEHICLE, SOCKET_RECOGNITION_DETECTED)
+
+        if command == SOCKET_RECOGNITION_FREE:
+            return self.server.broadcast(SOCKET_ID_VEHICLE, SOCKET_RECOGNITION_FREE)
+
+        return False
 
     def client_fake(self, command, payload):
         print('Received:', command, payload)
