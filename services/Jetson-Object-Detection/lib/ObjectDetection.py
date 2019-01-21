@@ -117,8 +117,7 @@ class ObjectDetection:
 
             return detection_graph
 
-    @staticmethod
-    def load_labelmap():
+    def load_labelmap(self):
         print('> Loading label map')
         label_map = label_map_util.load_labelmap(self.config['label_path'])
         categories = label_map_util.convert_label_map_to_categories(
