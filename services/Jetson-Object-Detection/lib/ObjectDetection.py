@@ -1,4 +1,6 @@
 import copy
+from builtins import Exception
+
 import cv2
 import numpy as np
 import time
@@ -170,12 +172,11 @@ class ObjectDetection:
 
                 print("> Press 'q' to Exit")
                 print('> Starting Detection')
-                while self.video_stream.isActive():
+                while self.video_stream.is_active():
                     # actual Detection
                     if self.config['split_model']:
                         # split model in separate gpu and cpu session threads
                         if self.gpu_worker.is_sess_empty():
-                            # read video frame, expand dimensions and convert to rgb
                             image = self.video_stream.read()
                             image_expanded = np.expand_dims(cv2.cvtColor(image, cv2.COLOR_BGR2RGB), axis=0)
                             # put new queue

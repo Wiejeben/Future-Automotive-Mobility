@@ -24,7 +24,7 @@ class WebcamVideoStream:
 
     def start(self):
         # start the thread to read frames from the video stream
-        threading.Thread(target=self.update, args=()).start()
+        threading.Thread(target=self.update, args=(), daemon=True).start()
         return self
 
     def update(self):
@@ -47,7 +47,7 @@ class WebcamVideoStream:
         # indicate that the thread should be stopped
         self.stopped = True
 
-    def isActive(self):
+    def is_active(self):
         # check if VideoCapture is still Opened
         return self.stream.isOpened
 
