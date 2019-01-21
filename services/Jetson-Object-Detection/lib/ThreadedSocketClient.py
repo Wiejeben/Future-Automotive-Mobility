@@ -35,11 +35,7 @@ class ThreadedSocketClient(Thread):
                 time.sleep(1)
                 continue
 
-            for box, score, classification in zip(
-                    np.squeeze(self.boxes),
-                    np.squeeze(self.scores),
-                    np.squeeze(self.classes)
-            ):
+            for box, score, classification in zip(self.boxes, self.scores, self.classes):
                 if score > self.threshold:
                     label = self.category_index[classification]['name']
 
