@@ -23,6 +23,7 @@ class ThreadedSocketClient(Thread):
             # Limit to 5 times per second
             time.sleep(0.1)
             if self.boxes is None or self.scores is None or self.classes is None:
+                print('> Was none')
                 continue
 
             current_frames += 1
