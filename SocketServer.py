@@ -18,20 +18,20 @@ class SocketServer:
         """Listens for connecting clients and creates a thread for each connection."""
         self.socket.listen(5)
 
-        print('Server is available on port', self.port)
+        print('> [INFO] Server is available on port', self.port)
 
         while True:
-            conn = None
+            connection = None
 
             try:
                 # Awaits incoming connections
-                conn, (ip, port) = self.socket.accept()
+                connection, address = self.socket.accept()
             except KeyboardInterrupt:
-                if conn:
-                    conn.close()
+                if connection:
+                    connection.close()
                 break
 
-            client = ThreadedSocketServerClient(self, conn)
+            client = ThreadedSocketServerClient(self, connection)
             self.clients.append(client)
             client.start()
 
