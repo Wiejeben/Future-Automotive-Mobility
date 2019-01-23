@@ -16,6 +16,7 @@ class SocketClient:
         self.connection = None
         self.on_disconnect = on_disconnect
         self.identity = identity
+        self.connected = False
 
     def connect(self, times_retrying: int = 5) -> bool:
         print('Connecting to remote host', self.host + ':' + str(self.port))
@@ -28,6 +29,8 @@ class SocketClient:
             if not self.receive() == SOCKET_ID_APPROVED:
                 print('raised exception')
                 raise Exception('Unknown identity ' + self.identity)
+
+            self.connected = True
         except socket.error as exception:
             print('Failed to connect to server:', exception)
 
@@ -39,6 +42,7 @@ class SocketClient:
             return False
 
         print('Connection established')
+        self.connected = True
         return True
 
     def disconnect(self) -> None:
@@ -49,6 +53,7 @@ class SocketClient:
 
         # 0 = done receiving, 1 = done sending, 2 = both
         self.connection.close()
+        self.connected = False
 
     def listen(self, callback, reconnect=True) -> None:
         print('Started listening')
@@ -81,6 +86,7 @@ class SocketClient:
 
                 except select.error as exception:
                     print('Connection error:', exception)
+                    self.connected = False
 
                     if not reconnect:
                         break
@@ -95,12 +101,16 @@ class SocketClient:
     def receive(self):
         return self.connection.recv(1024).decode()
 
-    def send(self, message: str) -> None:
-        self.connection.send((message + SOCKET_EOL).encode())
+    def send(self, message: str) -> bool:
+        try:
+            self.connection.send((message + SOCKET_EOL).encode())
+            return True
+        except:
+            return False
 
-    def send_command(self, command: str, *params):
+    def send_command(self, command: str, *params) -> bool:
         payload = ' '.join([command] + [str(i) for i in list(params)])
-        self.send(payload)
+        return self.send(payload)
 
 
 if __name__ == '__main__':

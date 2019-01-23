@@ -1,4 +1,3 @@
-import sys
 from threading import Thread
 
 import pygame
@@ -13,6 +12,7 @@ class Joystick(object):
         pygame.joystick.init()
         self.joystick = pygame.joystick.Joystick(0)
         self.joystick.init()
+        self.thread = Thread(target=self.broadcast, daemon=True)
 
         self.axis_data = {}
 
@@ -28,6 +28,8 @@ class Joystick(object):
 
         self.client = SocketClient(SOCKET_ID_JOYSTICK)
         self.client.connect()
+        # Start listen thread so it will automatically reconnect
+        Thread(target=self.client.listen, args=(self.on_message,), daemon=True).start()
 
         self.clock = pygame.time.Clock()
 
@@ -39,7 +41,7 @@ class Joystick(object):
 
     def listen(self):
         """Listen for events from the joystick."""
-        Thread(target=self.broadcast, daemon=True).start()
+        self.thread.start()
 
         while True:
             self.clock.tick(10)
@@ -53,29 +55,6 @@ class Joystick(object):
                     self.button_data[event.button] = False
                 elif event.type == pygame.JOYHATMOTION:
                     self.hat_data[event.hat] = event.value
-
-                # Insert your code on what you would like to happen for each event here!
-                # In the current setup, I have the state simply printing out to the screen.
-
-                # os.system('clear')
-                # print(self.button_data)
-                # print(self.axis_data)
-                # print(self.hat_data)
-
-                # 0 = []
-                # 1 = x
-                # 2 = O
-                # 3 = /\
-                # 4 = L1
-                # 5 = R1
-                # 6 = L2
-                # 7 = R2
-                # 8 = share
-                # 9 = options
-                # 10= L3
-                # 11= R3
-                # 12 = PSbutton
-                # 13 = touchpad
 
                 button_l2 = self.button_data[6]
                 button_r2 = self.button_data[7]
@@ -107,9 +86,15 @@ class Joystick(object):
                     self.left = False
                     self.right = False
 
+    def on_message(self, message):
+        print(message)
+
     def broadcast(self):
         while True:
             self.clock.tick(10)
+
+            if not self.client.connected:
+                continue
 
             # Steering
             if self.left:
