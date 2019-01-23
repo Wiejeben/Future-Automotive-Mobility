@@ -1,3 +1,5 @@
+from threading import Thread
+
 from lib.SocketClient import SocketClient
 from lib.constants import *
 
@@ -14,15 +16,18 @@ class FakeRecognition:
 
         message = input()
 
-        # if message != '1' and message != '0':
-        #     return
+        if message == '1':
+            self.client.send(SOCKET_RECOGNITION_DETECTED)
 
-        self.client.send(message)
+        if message == '0':
+            self.client.send(SOCKET_RECOGNITION_FREE)
 
 
 if __name__ == '__main__':
     recognition = FakeRecognition()
     recognition.connect()
+
+    Thread(target=recognition.client.listen, args=(print,), daemon=True).start()
 
     while True:
         try:
