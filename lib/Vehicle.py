@@ -1,7 +1,6 @@
 from threading import Thread
 
 from controllers import Controller
-from controllers.FakeController import FakeController
 from lib.SocketClient import SocketClient
 from lib.constants import *
 import time
@@ -15,7 +14,7 @@ class Vehicle:
         self.blocked = False
 
     def listen(self):
-        self.client.connect()
+        self.client.connect(999999)
 
         # Start thread to watch for timeouts
         Thread(target=self.timeout_watcher, daemon=True).start()
@@ -36,7 +35,7 @@ class Vehicle:
             if self.blocked:
                 self.controller.neutral()
 
-            time.sleep(0.1)
+            time.sleep(0.5)
 
     def on_message(self, message: str):
         payload = message.split(' ')
@@ -73,12 +72,12 @@ class Vehicle:
             self.controller.steer_right()
 
         if command == SOCKET_RECOGNITION_DETECTED:
-            print('[INFO] Stopping for detected person')
+            print('Stopping for detected person')
             self.blocked = True
             self.controller.neutral()
 
         if command == SOCKET_RECOGNITION_FREE:
-            print('[INFO] Continue now that blockade is gone')
+            print('Continue now that blockade is gone')
             self.blocked = False
 
         self.last_message = time.time()

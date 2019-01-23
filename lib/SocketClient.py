@@ -18,7 +18,7 @@ class SocketClient:
         self.identity = identity
         self.connected = False
 
-    def connect(self, times_retrying: int = 5) -> bool:
+    def connect(self, times_retrying: int = 20) -> bool:
         print('Connecting to remote host', self.host + ':' + str(self.port))
 
         try:
@@ -35,8 +35,8 @@ class SocketClient:
             print('Failed to connect to server:', exception)
 
             if times_retrying > 0:
-                print('Retrying in 5 seconds (' + str(times_retrying - 1) + ' attempts left)')
-                time.sleep(5)
+                print('Retrying in 2 seconds (' + str(times_retrying - 1) + ' attempts left)')
+                time.sleep(2)
                 return self.connect(times_retrying - 1)
 
             return False
