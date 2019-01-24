@@ -37,7 +37,7 @@ class ThreadedSocketClient(Thread):
                     label = self.category_index[classification]['name']
 
                     if label == 'person':
-                        connection.send((SOCKET_RECOGNITION_DETECTED + SOCKET_EOL).encode())
+                        client.send_command(SOCKET_RECOGNITION_DETECTED)
                         print('> [INFO] Person detected')
                         break
                     # print("==========\nlabel: {}\nscore: {}\nbox: {}".format(label, score, box))
