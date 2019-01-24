@@ -2,13 +2,9 @@ from threading import Thread
 
 from lib.config import load_config
 from lib.constants import *
-import os
 import socket
 import time
 import select
-
-# noinspection PyUnresolvedReferences
-from lib import settings
 
 
 class SocketClient:

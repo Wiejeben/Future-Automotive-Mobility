@@ -1,10 +1,8 @@
-import socket
 import time
 from builtins import zip
 from threading import Thread
 
 from lib.SocketClient import SocketClient
-from lib.config import load_config
 from lib.constants import *
 
 
