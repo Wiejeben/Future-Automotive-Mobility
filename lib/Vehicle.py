@@ -34,7 +34,7 @@ class Vehicle:
             # Force vehicle into neutral
             if self.blocked:
                 # Make sure we are blocking at least for 5 seconds after the last person was detected
-                if (now - self.blocked_since) > 5:
+                if (now - self.blocked_since) > 1:
                     self.unblock()
                     continue
 
