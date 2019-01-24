@@ -2,7 +2,8 @@ import socket
 import time
 from builtins import zip
 from threading import Thread
-import numpy as np
+
+from lib.SocketClient import SocketClient
 from lib.config import load_config
 from lib.constants import *
 
@@ -15,19 +16,17 @@ class ThreadedSocketClient(Thread):
         self.category_index = category_index
         self.threshold = threshold
 
-        config = load_config()
-        self.host = config['remote_host']
-        self.port = config['remote_port']
-
         self.boxes = None
         self.scores = None
         self.classes = None
 
     def run(self):
         # Create Socket connection
-        connection = socket.socket()
-        connection.connect((self.host, self.port))
-        connection.send((SOCKET_ID_RECOGNITION + SOCKET_EOL).encode())
+        client = SocketClient(SOCKET_ID_RECOGNITION)
+        client.connect(99999)
+
+        # Add listen thread for automatic reconnecting
+        Thread(target=client.listen, args=(print,), daemon=True).start()
 
         while True:
             time.sleep(0.2)
