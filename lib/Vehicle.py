@@ -12,6 +12,7 @@ class Vehicle:
         self.client = SocketClient(SOCKET_ID_VEHICLE)
         self.last_message = time.time()
         self.blocked = False
+        self.blocked_since = None
 
     def listen(self):
         self.client.connect(999999)
@@ -25,17 +26,30 @@ class Vehicle:
         """Puts vehicle in neutral if no message was received in the last 1 second."""
         while True:
             now = time.time()
-            difference = now - self.last_message
 
             # Put vehicle into neutral after 1 second
-            if difference > 1:
+            if (now - self.last_message) > 1:
                 self.controller.neutral()
 
             # Force vehicle into neutral
             if self.blocked:
+                # Make sure we are blocking at least for 5 seconds after the last person was detected
+                if (now - self.blocked_since) > 5:
+                    self.unblock()
+                    continue
+
                 self.controller.neutral()
 
             time.sleep(0.5)
+
+    def block(self):
+        self.controller.neutral()
+        self.blocked_since = time.time()
+        self.blocked = True
+
+    def unblock(self):
+        self.blocked_since = None
+        self.blocked = False
 
     def on_message(self, message: str):
         payload = message.split(' ')
@@ -73,11 +87,10 @@ class Vehicle:
 
         if command == SOCKET_RECOGNITION_DETECTED:
             print('Stopping for detected person')
-            self.blocked = True
-            self.controller.neutral()
+            self.block()
 
         if command == SOCKET_RECOGNITION_FREE:
             print('Continue now that blockade is gone')
-            self.blocked = False
+            self.unblock()
 
         self.last_message = time.time()

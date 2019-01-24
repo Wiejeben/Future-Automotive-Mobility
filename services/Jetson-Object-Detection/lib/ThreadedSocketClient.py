@@ -30,7 +30,7 @@ class ThreadedSocketClient(Thread):
         connection.send((SOCKET_ID_RECOGNITION + SOCKET_EOL).encode())
 
         while True:
-            time.sleep(0.1)
+            time.sleep(0.2)
             if self.boxes is None or self.scores is None or self.classes is None:
                 time.sleep(1)
                 continue
