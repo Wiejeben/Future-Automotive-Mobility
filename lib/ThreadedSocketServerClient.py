@@ -131,6 +131,7 @@ class ThreadedSocketServerClient(Thread):
 
     def client_recognition(self, command, payload):
         if command == SOCKET_RECOGNITION_DETECTED:
+            print('[BROADCAST] Person detected')
             return self.server.broadcast(SOCKET_ID_VEHICLE, SOCKET_RECOGNITION_DETECTED)
 
         if command == SOCKET_RECOGNITION_FREE:
